@@ -1,6 +1,4 @@
-package com.example.jetpackcompose.data.repository
-
-import com.example.jetpackcompose.data.model.WeatherData
+package com.example.jetpackcompose.data
 
 class WeatherRepositoryImpl : WeatherRepository {
     override suspend fun getCurrentWeather(): WeatherData {

@@ -1,4 +1,4 @@
-package com.example.jetpackcompose.data.model
+package com.example.jetpackcompose.data
 
 data class WeatherData(
     val temperature: Double,

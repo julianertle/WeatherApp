@@ -1,14 +1,14 @@
 package com.example.jetpackcompose
 
-import WeatherApp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.jetpackcompose.data.repository.WeatherRepositoryImpl
+import com.example.jetpackcompose.data.WeatherRepositoryImpl
 import com.example.jetpackcompose.domain.WeatherViewModel
+import com.example.jetpackcompose.ui.WeatherApp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
