@@ -1,6 +1,6 @@
 package com.example.jetpackcompose
 
-import WeatherRepository
+import com.example.jetpackcompose.data.repository.WeatherRepository
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.jetpackcompose.domain.WeatherViewModel

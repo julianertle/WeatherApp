@@ -1,7 +1,7 @@
 package com.example.jetpackcompose.domain
 
-import WeatherData
-import WeatherRepository
+import com.example.jetpackcompose.data.model.WeatherData
+import com.example.jetpackcompose.data.repository.WeatherRepository
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow

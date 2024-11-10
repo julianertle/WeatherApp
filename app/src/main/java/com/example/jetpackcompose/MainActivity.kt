@@ -7,7 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.jetpackcompose.data.WeatherRepositoryImpl
+import com.example.jetpackcompose.data.repository.WeatherRepositoryImpl
 import com.example.jetpackcompose.domain.WeatherViewModel
 
 class MainActivity : ComponentActivity() {

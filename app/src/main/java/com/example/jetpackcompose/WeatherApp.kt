@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import com.example.jetpackcompose.data.model.WeatherData
 import com.example.jetpackcompose.domain.WeatherViewModel
 
 @Composable
