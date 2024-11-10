@@ -11,11 +11,12 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.foundation.layout.*
 
 @Composable
-fun BottomNavBar(selectedItem: Int, onItemSelected: (Int) -> Unit) {
+fun BottomNavBar(selectedItem: Int, onItemSelected: (Int) -> Unit, modifier: Modifier = Modifier) {
     BottomNavigation(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(), // Now accepts modifier
         backgroundColor = MaterialTheme.colorScheme.primary
     ) {
         BottomNavigationItem(

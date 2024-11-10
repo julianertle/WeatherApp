@@ -8,6 +8,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.jetpackcompose.data.WeatherRepositoryImpl
 import com.example.jetpackcompose.domain.WeatherViewModel
+import com.example.jetpackcompose.model.WeatherViewModelFactory
 import com.example.jetpackcompose.ui.WeatherApp
 
 class MainActivity : ComponentActivity() {
@@ -17,7 +18,8 @@ class MainActivity : ComponentActivity() {
             // Use WeatherViewModelFactory to create WeatherViewModel
             val viewModel: WeatherViewModel = viewModel(factory = WeatherViewModelFactory(
                 WeatherRepositoryImpl()
-            ))
+            )
+            )
 
             // Set the content to WeatherApp with the created viewModel
             WeatherApp(viewModel)
