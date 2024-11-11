@@ -1,6 +1,7 @@
 package com.example.jetpackcompose.ui
 
 
+import SearchBarSample
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -38,7 +39,6 @@ fun WeatherApp(viewModel: WeatherViewModel) {
                     .background(upperHalfColor)
             )
 
-            // Lower half (Yellow background)
             Box(
                 modifier = Modifier
                     .weight(1f)  // Take the remaining half
@@ -47,6 +47,7 @@ fun WeatherApp(viewModel: WeatherViewModel) {
             )
         }
     }
+
 
 
     Box(
@@ -61,6 +62,17 @@ fun WeatherApp(viewModel: WeatherViewModel) {
                 .padding(bottom = 0.dp), // Make space for the BottomNavBar
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                SearchBarSample()
+            }
+
+            Spacer(modifier = Modifier.height(16.dp)) // Add some space between the search bar and the weather display
+
+
             // Display current weather
             if (selectedItem == 0) {
                 currentWeather?.let {
