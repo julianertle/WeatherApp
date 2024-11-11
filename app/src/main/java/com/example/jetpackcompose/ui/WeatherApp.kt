@@ -1,7 +1,6 @@
 package com.example.jetpackcompose.ui
 
-import android.app.Activity
-import android.os.Build
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,11 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.jetpackcompose.domain.WeatherViewModel
 import androidx.compose.foundation.lazy.items  // Make sure to import items
-import androidx.compose.foundation.layout.*
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.ContextCompat
-import androidx.core.view.WindowInsetsControllerCompat
 
 @Composable
 fun WeatherApp(viewModel: WeatherViewModel) {
@@ -27,7 +22,7 @@ fun WeatherApp(viewModel: WeatherViewModel) {
 
     // Background for the android system bars (camera and bottom navigation)
     // Define color variables
-    val backgroundColor = Color.Gray
+    val upperHalfColor = Color.Gray
     val lowerHalfColor = Color.Yellow
 
     Box(
@@ -40,7 +35,7 @@ fun WeatherApp(viewModel: WeatherViewModel) {
                 modifier = Modifier
                     .weight(1f)  // Take half of the available space
                     .fillMaxWidth()
-                    .background(backgroundColor)
+                    .background(upperHalfColor)
             )
 
             // Lower half (Yellow background)
@@ -87,6 +82,9 @@ fun WeatherApp(viewModel: WeatherViewModel) {
                         }
                     }
                 }
+            }
+            if (selectedItem == 2) {
+                SettingsView()  // Display the SettingsView when selectedItem is 2
             }
         }
 

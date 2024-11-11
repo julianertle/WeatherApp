@@ -44,6 +44,8 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation libs.androidx.material
+    implementation libs.androidx.datastore.preferences
+
 
     // Core Android libraries
     implementation(libs.androidx.core.ktx)
