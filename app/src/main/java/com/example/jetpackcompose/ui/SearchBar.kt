@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.saveable.rememberSaveable
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
@@ -34,8 +33,8 @@ fun SearchBarSample() {
 
     Box(
         modifier = Modifier
-            .wrapContentHeight()  // This ensures the Box only takes the required height
-            .fillMaxWidth()  // Take full width of the parent
+            .fillMaxWidth() // Ensure it fills the width
+            .heightIn(max = 400.dp) // Add a maximum height to avoid infinite scroll
             .semantics { isTraversalGroup = true }
     ) {
         SearchBar(
@@ -56,29 +55,27 @@ fun SearchBarSample() {
             expanded = expanded,
             onExpandedChange = { expanded = it },
         ) {
-            // Constrain the height of the suggestion list to avoid extending too far
-            Box(
+            // Use LazyColumn for better performance with dynamic lists
+            LazyColumn(
                 modifier = Modifier
-                    .heightIn(max = 200.dp)  // This limits the height of the suggestion list
-                    .verticalScroll(rememberScrollState())  // Allow scrolling if there are more items
+                    .fillMaxWidth()
+                    .heightIn(max = 300.dp) // Ensure a max height for the LazyColumn
             ) {
-                Column {
-                    repeat(4) { idx ->
-                        val resultText = "Suggestion $idx"
-                        ListItem(
-                            headlineContent = { Text(resultText) },
-                            supportingContent = { Text("Additional info") },
-                            leadingContent = { Icon(Icons.Filled.Star, contentDescription = null) },
-                            colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-                            modifier =
-                            Modifier.clickable {
+                items(4) { idx ->
+                    val resultText = "Suggestion $idx"
+                    ListItem(
+                        headlineContent = { Text(resultText) },
+                        supportingContent = { Text("Additional info") },
+                        leadingContent = { Icon(Icons.Filled.Star, contentDescription = null) },
+                        colors = ListItemDefaults.colors(containerColor = Color.Transparent),
+                        modifier = Modifier
+                            .clickable {
                                 textFieldState.setTextAndPlaceCursorAtEnd(resultText)
                                 expanded = false
                             }
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 4.dp)
-                        )
-                    }
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 4.dp)
+                    )
                 }
             }
         }
