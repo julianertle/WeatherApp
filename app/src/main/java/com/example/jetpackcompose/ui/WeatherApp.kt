@@ -22,8 +22,8 @@ fun WeatherApp(viewModel: WeatherViewModel) {
 
     // Background for the android system bars (camera and bottom navigation)
     // Define color variables
-    val upperHalfColor = Color.Gray
-    val lowerHalfColor = Color.Yellow
+    val upperHalfColor = Color.White
+    val lowerHalfColor = Color(0xFF1E88E5) // Material Design Blue 500 (popular blue)
 
     Box(
         modifier = Modifier
@@ -53,7 +53,7 @@ fun WeatherApp(viewModel: WeatherViewModel) {
         modifier = Modifier
             .fillMaxSize()
             .systemBarsPadding()
-            .background(Color.Gray)
+            .background(upperHalfColor)
     ) {
         Column(
             modifier = Modifier
@@ -93,7 +93,8 @@ fun WeatherApp(viewModel: WeatherViewModel) {
             onItemSelected = { selectedItem = it },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                /*.fillMaxWidth()*/
+                /*.fillMaxWidth()*/,
+            color = lowerHalfColor
         )
     }
 }
