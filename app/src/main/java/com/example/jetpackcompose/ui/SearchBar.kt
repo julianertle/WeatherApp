@@ -1,10 +1,8 @@
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
@@ -44,12 +42,16 @@ fun SearchBarSample() {
             inputField = {
                 SearchBarDefaults.InputField(
                     state = textFieldState,
-                    onSearch = { expanded = false },
+                    onSearch = { query ->
+                        println("Search input: $query")
+                        expanded = false // Optionally collapse the search bar after search
+                    },
                     expanded = expanded,
                     onExpandedChange = { expanded = it },
                     placeholder = { Text("Hinted search text") },
                     leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
                     trailingIcon = { Icon(Icons.Default.MoreVert, contentDescription = null) },
+
                 )
             },
             expanded = expanded,
