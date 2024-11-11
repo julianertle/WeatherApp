@@ -99,11 +99,11 @@ fun SettingsView() {
             title = { Text(text = "API Token Info") },
             text = {
                 TextButton(onClick = {
-                    val url = "https://openweathermap.org/"
+                    val url = "https://home.openweathermap.org/users/sign_in"
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                     context.startActivity(intent)
                 }) {
-                    Text("Click here to generate your own API Token from openweather.com", color = MaterialTheme.colorScheme.primary)
+                    Text("Click here to generate your own API Token from openweathermap.org", color = MaterialTheme.colorScheme.primary)
                 }
             },
             confirmButton = {

@@ -1,5 +1,7 @@
 package com.example.jetpackcompose.data
 
+import com.example.jetpackcompose.api.WeatherApiService
+
 class WeatherRepositoryImpl : WeatherRepository {
     override suspend fun getCurrentWeather(): WeatherData {
         // Mock data for simplicity
@@ -17,5 +19,9 @@ class WeatherRepositoryImpl : WeatherRepository {
             WeatherData(20.0, "Cloudy", "https://example.com/cloudy.png", "Tomorrow"),
             WeatherData(18.5, "Rainy", "https://example.com/rainy.png", "Day After Tomorrow")
         )
+    }
+
+    override suspend fun getWeather(city: String): WeatherData {
+        return WeatherApiService.fetchWeather(city)
     }
 }
