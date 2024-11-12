@@ -9,15 +9,8 @@ import retrofit2.http.Query
 interface WeatherApi {
 
     @GET("weather")
-    suspend fun getWeatherByCity(
+    suspend fun fetchRawWeather(
         @Query("q") city: String,
-        @Query("appid") apiKey: String
-    ): Response<WeatherData>
-
-
-    @GET("weather")
-    suspend fun getRawWeatherByCity(
-        @Query("q") city: String,
-        @Query("appid") apiKey: String
-    ): Response<ResponseBody>
+        @Query("appid") apiKey: String = "31c02750cfcd532431987a20153cde7c" // Add your API key here
+    ): Response<String>
 }

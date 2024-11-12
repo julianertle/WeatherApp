@@ -47,7 +47,7 @@ fun SearchBarSample(weatherViewModel: WeatherViewModel = viewModel()) {
                     onSearch = { query ->
                         println("Search input: $query")
 
-                        weatherViewModel.fetchRawWeatherData(query)
+                        weatherViewModel.fetchWeatherData(query)
 
                         expanded = false // Optionally collapse the search bar after search
                     },

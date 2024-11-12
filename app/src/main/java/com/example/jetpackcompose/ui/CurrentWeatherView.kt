@@ -17,12 +17,12 @@ import com.example.jetpackcompose.data.WeatherData
 fun CurrentWeatherView(weather: WeatherData) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
-            painter = rememberAsyncImagePainter(weather.iconUrl),
+            painter = rememberAsyncImagePainter("weather.iconUrl"),
             contentDescription = null,
             modifier = Modifier.size(80.dp),
             contentScale = ContentScale.Crop
         )
-        Text(text = "${weather.temperature}°C", style = MaterialTheme.typography.displayLarge)
-        Text(text = weather.condition, style = MaterialTheme.typography.bodyLarge, color = Color.Gray)
+        Text(text = "${"weather.temperature"}°C", style = MaterialTheme.typography.displayLarge)
+        Text(text = "weather.condition", style = MaterialTheme.typography.bodyLarge, color = Color.Gray)
     }
 }

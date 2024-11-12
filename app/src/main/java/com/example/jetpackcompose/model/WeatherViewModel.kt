@@ -14,23 +14,22 @@ import androidx.compose.runtime.State // Importing the State class from Compose
 
 class WeatherViewModel(private val weatherRepository: WeatherRepository) : ViewModel() {
 
-    private val _weatherData = mutableStateOf<String?>(null)
-    val weatherData: State<String?> get() = _weatherData
-    // StateFlow to hold the current weather data
+    // Update this to hold WeatherData instead of String
+    private val _weatherData = mutableStateOf<WeatherData?>(null)
+    val weatherData: State<WeatherData?> get() = _weatherData
+
     private val _currentWeather = MutableStateFlow<WeatherData?>(null)
     val currentWeather: StateFlow<WeatherData?> = _currentWeather
 
-    // StateFlow to hold the forecast data (a list of WeatherData)
     private val _forecast = MutableStateFlow<List<WeatherData>>(emptyList())
     val forecast: StateFlow<List<WeatherData>> = _forecast
 
-
-    fun fetchRawWeatherData(city: String) {
+    fun fetchWeatherData(city: String) {
         viewModelScope.launch {
-            val data = WeatherApiService.fetchRawWeather(city) // Corrected reference
-            if (data != null) {
-                _weatherData.value = data // Update state with fetched data
-                Log.d("WeatherViewModel", "Fetched weather data: $data")
+            val weatherData = WeatherApiService.fetchWeather(city)
+            if (weatherData != null) {
+                _weatherData.value = weatherData // Now it's assigning a WeatherData object
+                Log.d("WeatherViewModel", "Fetched weather data for $city: ${weatherData.name}, ${weatherData.main.temp}")
             } else {
                 Log.e("WeatherViewModel", "Failed to fetch weather data.")
             }

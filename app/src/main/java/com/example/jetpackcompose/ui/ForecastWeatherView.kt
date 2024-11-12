@@ -24,7 +24,7 @@ fun ForecastWeatherView(weather: WeatherData) {
     ) {
         // Weather icon
         Image(
-            painter = rememberAsyncImagePainter(weather.iconUrl),
+            painter = rememberAsyncImagePainter("weather.iconUrl"),
             contentDescription = null,
             modifier = Modifier.size(40.dp),
             contentScale = ContentScale.Crop
@@ -34,8 +34,8 @@ fun ForecastWeatherView(weather: WeatherData) {
 
         // Weather data details
         Column {
-            Text(text = weather.date, style = MaterialTheme.typography.bodyLarge)
-            Text(text = "${weather.temperature}°C - ${weather.condition}", color = Color.Gray)
+            Text(text = "weather.date", style = MaterialTheme.typography.bodyLarge)
+            Text(text = "${"weather.temperature"}°C - ${"weather.condition"}", color = Color.Gray)
         }
     }
 }
