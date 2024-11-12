@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.jetpackcompose.data.WeatherData
 import com.example.jetpackcompose.data.WeatherRepository
-
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -19,32 +18,36 @@ class WeatherViewModel(private val weatherRepository: WeatherRepository) : ViewM
     private val _forecast = MutableStateFlow<List<WeatherData>>(emptyList())
     val forecast: StateFlow<List<WeatherData>> = _forecast
 
-    // Load current weather and forecast
-    init {
-        loadWeatherData()
-    }
-
-    // Function to load the current weather and forecast
-    private fun loadWeatherData() {
+    // Function to load current weather and forecast for a given query
+    fun fetchWeatherData(query: String) {
         // Load current weather
         viewModelScope.launch {
             try {
-                val current = weatherRepository.getCurrentWeather()
+                val current = weatherRepository.getCurrentWeather(query)
                 _currentWeather.value = current
             } catch (e: Exception) {
-                // Handle error appropriately, e.g., logging or showing an error message
                 _currentWeather.value = null
             }
         }
 
-        // Load forecast
+        /*// Load forecast (this is just a placeholder)
         viewModelScope.launch {
             try {
-                val weatherForecast = weatherRepository.getWeatherForecast()
+                val weatherForecast = weatherRepository.getWeatherForecast(query)
                 _forecast.value = weatherForecast
             } catch (e: Exception) {
-                // Handle error appropriately
                 _forecast.value = emptyList()
+            }
+        }*/
+    }
+    fun fetchRawWeatherData(query: String) {
+        // Load current weather
+        viewModelScope.launch {
+            try {
+                val current = weatherRepository.getCurrentRawWeather(query)
+                //_currentWeather.value = current
+            } catch (e: Exception) {
+                _currentWeather.value = null
             }
         }
     }

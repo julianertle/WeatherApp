@@ -21,11 +21,14 @@ import androidx.compose.ui.unit.dp
 // Imports for TextField and SearchBar specific components
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.jetpackcompose.api.WeatherApiService.fetchWeather
+import com.example.jetpackcompose.domain.WeatherViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
-fun SearchBarSample() {
+fun SearchBarSample(weatherViewModel: WeatherViewModel = viewModel()) {
     val textFieldState = rememberTextFieldState()
     var expanded by rememberSaveable { mutableStateOf(false) }
 
@@ -44,6 +47,9 @@ fun SearchBarSample() {
                     state = textFieldState,
                     onSearch = { query ->
                         println("Search input: $query")
+
+                        weatherViewModel.fetchRawWeatherData(query)
+
                         expanded = false // Optionally collapse the search bar after search
                     },
                     expanded = expanded,

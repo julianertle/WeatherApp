@@ -21,7 +21,13 @@ class WeatherRepositoryImpl : WeatherRepository {
         )
     }
 
-    override suspend fun getWeather(city: String): WeatherData {
-        return WeatherApiService.fetchWeather(city)
+    override suspend fun getCurrentWeather(city: String): WeatherData {
+        val weatherData = WeatherApiService.fetchWeather(city)
+        return weatherData ?: throw Exception("Weather data for $city not found") // Throw an exception if null
     }
+    override suspend fun getCurrentRawWeather(city: String): String {
+        val weatherData = WeatherApiService.fetchRawWeather(city)
+        return weatherData ?: throw Exception("Weather data for $city not found") // Throw an exception if null
+    }
+
 }
