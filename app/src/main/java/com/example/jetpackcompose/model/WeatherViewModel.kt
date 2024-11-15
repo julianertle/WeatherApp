@@ -33,6 +33,7 @@ class WeatherViewModel(private val weatherRepository: WeatherRepository) : ViewM
             } else {
                 Log.e("WeatherViewModel", "Failed to fetch weather data.")
             }
+
         }
     }
 }

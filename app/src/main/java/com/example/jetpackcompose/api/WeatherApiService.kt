@@ -28,7 +28,8 @@ object WeatherApiService {
         @GET("weather")
         suspend fun fetchWeather(
             @Query("q") city: String,
-            @Query("appid") apiKey: String = API_KEY
+            @Query("appid") apiKey: String = API_KEY,
+            @Query("units") units: String = "metric" // Add the units parameter with a default value
         ): retrofit2.Response<WeatherData>
     }
 
