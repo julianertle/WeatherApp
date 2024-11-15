@@ -89,7 +89,7 @@ fun SearchBarSample(weatherViewModel: WeatherViewModel = viewModel()) {
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp)) // Space between the SearchBar and weather data
+            //Spacer(modifier = Modifier.height(16.dp)) // Space between the SearchBar and weather data
         }
     }
 }
