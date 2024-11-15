@@ -90,21 +90,6 @@ fun SearchBarSample(weatherViewModel: WeatherViewModel = viewModel()) {
             }
 
             Spacer(modifier = Modifier.height(16.dp)) // Space between the SearchBar and weather data
-
-            // Weather Data Display
-            currentWeather?.let {
-                Text(
-                    text = "Temperature in ${it.name}: ${it.main.temp}°C",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = Color.Black,
-                    modifier = Modifier.padding(16.dp)
-                )
-            } ?: Text(
-                text = "No data available",
-                style = MaterialTheme.typography.bodyLarge,
-                color = Color.Gray,
-                modifier = Modifier.padding(16.dp)
-            )
         }
     }
 }

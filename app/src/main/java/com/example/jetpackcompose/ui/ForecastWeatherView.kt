@@ -15,7 +15,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.jetpackcompose.data.WeatherData
 
 @Composable
-fun ForecastWeatherView(weather: WeatherData) {
+fun ForecastWeatherView() {
     Row(
         modifier = Modifier
             .fillMaxWidth()

@@ -14,15 +14,30 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.jetpackcompose.data.WeatherData
 
 @Composable
-fun CurrentWeatherView(weather: WeatherData) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Image(
-            painter = rememberAsyncImagePainter("weather.iconUrl"),
-            contentDescription = null,
-            modifier = Modifier.size(80.dp),
-            contentScale = ContentScale.Crop
-        )
-        Text(text = "${"weather.temperature"}°C", style = MaterialTheme.typography.displayLarge)
-        Text(text = "weather.condition", style = MaterialTheme.typography.bodyLarge, color = Color.Gray)
-    }
+fun CurrentWeatherView(currentWeather: WeatherData?, iconUrl: String?) {
+    currentWeather?.let {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            // Display weather icon
+            iconUrl?.let {
+                Image(
+                    painter = rememberAsyncImagePainter(it),
+                    contentDescription = "Weather icon",
+                    modifier = Modifier.size(64.dp) // Adjust size as needed
+                )
+            }
+
+            // Display temperature or other weather data if needed
+            Text(
+                text = "Temperature: ${it.main.temp}°C", // Example of showing temp
+                style = MaterialTheme.typography.bodyLarge,
+                color = Color.Black,
+                modifier = Modifier.padding(16.dp)
+            )
+        }
+    } ?: Text(
+        text = "No current weather data available.",
+        style = MaterialTheme.typography.bodyLarge,
+        color = Color.Gray,
+        modifier = Modifier.padding(16.dp)
+    )
 }
