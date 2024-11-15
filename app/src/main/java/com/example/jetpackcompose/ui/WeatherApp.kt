@@ -1,7 +1,7 @@
 package com.example.jetpackcompose.ui
 
-
 import SearchBarSample
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,16 +10,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.jetpackcompose.domain.WeatherViewModel
 import androidx.compose.foundation.lazy.items  // Make sure to import items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.ui.graphics.Color
-import androidx.compose.foundation.verticalScroll
+import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun WeatherApp(viewModel: WeatherViewModel) {
-    val currentWeather = viewModel.currentWeather.collectAsState().value
-    val forecast = viewModel.forecast.collectAsState().value
+    val currentWeather = viewModel.currentWeather.collectAsState().value // Use 'currentWeather'
+    val forecast = viewModel.forecast.collectAsState().value // Use 'forecast'
+    val iconUrl = viewModel.iconUrl.collectAsState().value // Get the icon URL
 
     var selectedItem by remember { mutableStateOf(0) } // 0: Home, 1: Forecast, 2: Settings
 
@@ -75,7 +74,19 @@ fun WeatherApp(viewModel: WeatherViewModel) {
                 // Display current weather
                 if (selectedItem == 0) {
                     currentWeather?.let {
-                        CurrentWeatherView(weather = it)
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            // Current weather display
+                            //CurrentWeatherView(weather = it)
+
+                            // Weather icon
+                            iconUrl?.let {
+                                Image(
+                                    painter = rememberAsyncImagePainter(it), // Use the new function here
+                                    contentDescription = "Weather icon",
+                                    modifier = Modifier.size(64.dp), // Adjust size as needed
+                                )
+                            }
+                        }
                     }
                 }
                 Spacer(modifier = Modifier.height(16.dp))

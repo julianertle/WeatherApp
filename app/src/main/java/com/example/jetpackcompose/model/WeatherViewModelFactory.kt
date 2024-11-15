@@ -1,9 +1,9 @@
 package com.example.jetpackcompose.model
 
+import WeatherViewModel
 import com.example.jetpackcompose.data.WeatherRepository
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.jetpackcompose.domain.WeatherViewModel
 
 class WeatherViewModelFactory(private val repository: WeatherRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

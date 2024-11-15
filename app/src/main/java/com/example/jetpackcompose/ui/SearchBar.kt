@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -22,18 +21,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.jetpackcompose.domain.WeatherViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun SearchBarSample(weatherViewModel: WeatherViewModel = viewModel()) {
     val textFieldState = rememberTextFieldState()
     var expanded by rememberSaveable { mutableStateOf(false) }
-    val weatherData by weatherViewModel.weatherData // Observe the weather data from the ViewModel
+
+    // Collect the current weather data
+    val currentWeather by weatherViewModel.currentWeather.collectAsState() // Corrected to currentWeather
 
     Box(
         modifier = Modifier
-            .fillMaxWidth() // Ensure it fills the width
+            .fillMaxWidth()
             .heightIn(max = 400.dp) // Add a maximum height to avoid infinite scroll
             .semantics { isTraversalGroup = true }
     ) {
@@ -92,7 +92,7 @@ fun SearchBarSample(weatherViewModel: WeatherViewModel = viewModel()) {
             Spacer(modifier = Modifier.height(16.dp)) // Space between the SearchBar and weather data
 
             // Weather Data Display
-            weatherData?.let {
+            currentWeather?.let {
                 Text(
                     text = "Temperature in ${it.name}: ${it.main.temp}°C",
                     style = MaterialTheme.typography.bodyLarge,
