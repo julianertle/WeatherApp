@@ -45,6 +45,13 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation libs.androidx.material
     implementation libs.androidx.datastore.preferences
+    implementation(libs.retrofit)
+    // Converter for JSON (use either Gson or Moshi)
+    implementation libs.converter.gson // For Gson
+    // Optional: OkHttp for logging network requests/responses
+    implementation libs.logging.interceptor
+    implementation(libs.material3)
+    implementation libs.converter.scalars
 
 
     // Core Android libraries
@@ -62,10 +69,10 @@ dependencies {
     implementation(libs.androidx.material3)  // Ensure Material3 is included
 
     // Material icons (for BottomNavigation)
-    implementation("androidx.compose.material:material-icons-extended:1.5.0")
+    implementation(libs.androidx.material.icons.extended)
 
     // For using BottomNavigation and other Material3 components
-    implementation("androidx.compose.material3:material3:1.0.0")  // Material3 components
+    implementation(libs.androidx.material3.v131)  // Material3 components
 
     // Testing dependencies
     testImplementation(libs.junit)
