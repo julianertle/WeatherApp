@@ -35,21 +35,18 @@ object WeatherApiService {
 
     suspend fun fetchWeather(city: String): WeatherData? {
         return try {
-            // Making the API call on the IO dispatcher
             withContext(Dispatchers.IO) {
                 val response = api.fetchWeather(city)
 
-                // Check if the response is successful and return the body (WeatherData)
                 if (response.isSuccessful) {
                     response.body() // Automatically parsed into WeatherData
                 } else {
-                    // If the response is not successful, log the error
+
                     Log.e("WeatherApiService", "Failed to fetch weather for $city: ${response.code()}")
                     null
                 }
             }
         } catch (e: Exception) {
-            // Catch any exceptions and log the error
             Log.e("WeatherApiService", "Error fetching weather data for $city: ${e.message}")
             null
         }

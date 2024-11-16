@@ -1,6 +1,5 @@
 package com.example.jetpackcompose.ui
 
-import SearchBarSample
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
@@ -8,6 +7,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
+import com.example.jetpackcompose.model.WeatherViewModel
 
 @Composable
 fun WeatherApp(viewModel: WeatherViewModel) {

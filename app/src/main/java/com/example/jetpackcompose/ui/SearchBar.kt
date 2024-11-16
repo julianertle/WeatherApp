@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.jetpackcompose.model.WeatherViewModel
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
@@ -88,8 +90,6 @@ fun SearchBarSample(weatherViewModel: WeatherViewModel = viewModel()) {
                     }
                 }
             }
-
-            //Spacer(modifier = Modifier.height(16.dp)) // Space between the SearchBar and weather data
         }
     }
 }

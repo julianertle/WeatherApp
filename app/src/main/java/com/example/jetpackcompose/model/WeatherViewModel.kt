@@ -1,10 +1,9 @@
-
+package com.example.jetpackcompose.model
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.jetpackcompose.api.WeatherApiService
 import com.example.jetpackcompose.data.WeatherData
 import kotlinx.coroutines.launch
-
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -19,7 +18,6 @@ class WeatherViewModel() : ViewModel() {
     private val _iconUrl = MutableStateFlow<String?>(null) // For weather icon
     val iconUrl: StateFlow<String?> get() = _iconUrl
 
-    // Fetch weather data
     fun fetchWeatherData(city: String) {
         viewModelScope.launch {
             val weatherData = WeatherApiService.fetchWeather(city)
@@ -31,7 +29,6 @@ class WeatherViewModel() : ViewModel() {
         }
     }
 
-    // Fetch weather icon based on the iconId
     private fun fetchWeatherIcon(iconId: String) {
         if (iconId.isNotEmpty()) {
             val iconUrl = "https://openweathermap.org/img/wn/$iconId@2x.png"

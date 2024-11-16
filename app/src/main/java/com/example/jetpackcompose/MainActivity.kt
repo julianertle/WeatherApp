@@ -1,6 +1,6 @@
 package com.example.jetpackcompose
 
-import WeatherViewModel
+import com.example.jetpackcompose.model.WeatherViewModel
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,13 +15,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            // Use WeatherViewModelFactory to create WeatherViewModel
             val viewModel: WeatherViewModel = viewModel(factory = WeatherViewModelFactory(
-                WeatherRepositoryImpl()
+                WeatherRepositoryImpl())
             )
-            )
-
-            // Set the content to WeatherApp with the created viewModel
             WeatherApp(viewModel)
         }
     }
