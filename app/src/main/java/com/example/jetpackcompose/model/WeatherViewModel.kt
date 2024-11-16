@@ -1,17 +1,14 @@
-import android.util.Log
-import androidx.compose.runtime.mutableStateOf
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.jetpackcompose.api.WeatherApiService
 import com.example.jetpackcompose.data.WeatherData
-import com.example.jetpackcompose.data.WeatherRepository
 import kotlinx.coroutines.launch
-import androidx.compose.runtime.State // Importing the State class from Compose
-import coil.compose.rememberImagePainter // For loading images into Compose Image view
+
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class WeatherViewModel(private val weatherRepository: WeatherRepository) : ViewModel() {
+class WeatherViewModel() : ViewModel() {
 
     private val _currentWeather = MutableStateFlow<WeatherData?>(null)
     val currentWeather: StateFlow<WeatherData?> = _currentWeather

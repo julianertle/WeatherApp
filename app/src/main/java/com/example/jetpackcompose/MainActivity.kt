@@ -30,6 +30,6 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true, name = "Weather App Preview")@Composable
 fun PreviewWeatherApp() {
     // Create a mock or default WeatherViewModel for preview
-    val viewModel = WeatherViewModel(WeatherRepositoryImpl())
+    val viewModel = WeatherViewModel()
     WeatherApp(viewModel)
 }

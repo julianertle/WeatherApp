@@ -1,5 +1,6 @@
 package com.example.jetpackcompose.ui
 
+import SearchBarSample
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -18,7 +19,11 @@ import java.util.*
 
 @Composable
 fun CurrentWeatherView(currentWeather: WeatherData?, iconUrl: String?) {
+
+    SearchBarSample()
+
     currentWeather?.let {
+
         // Root column with background and rounded corners
         Column(
             modifier = Modifier
@@ -93,7 +98,8 @@ fun CurrentWeatherView(currentWeather: WeatherData?, iconUrl: String?) {
                     }
                 }
             }
-
+            createWeatherInfoRow("Description:", it.weather[0].description)
+            Spacer(modifier = Modifier.height(8.dp))
             createWeatherInfoRow("Temp.:", "${it.main.temp}°C")
             Spacer(modifier = Modifier.height(8.dp))
             createWeatherInfoRow("Feels Like:", "${it.main.feels_like}°C")

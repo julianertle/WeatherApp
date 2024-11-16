@@ -48,13 +48,6 @@ fun WeatherApp(viewModel: WeatherViewModel) {
                     .padding(bottom = 0.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    SearchBarSample()
-                }
-
                 Spacer(modifier = Modifier.height(16.dp))
 
                 if (selectedItem == 0) {
@@ -63,8 +56,6 @@ fun WeatherApp(viewModel: WeatherViewModel) {
                         iconUrl = iconUrl
                     )
                 }
-
-                Spacer(modifier = Modifier.height(16.dp))
 
                 if (selectedItem == 1) {
                     ForecastWeatherView()
