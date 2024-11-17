@@ -1,6 +1,7 @@
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material.icons.Icons
@@ -62,11 +63,14 @@ fun SearchBarSample(weatherViewModel: WeatherViewModel = viewModel()) {
                             weatherViewModel.fetchWeatherData(query)
 
                             // Update recent searches
-                            recentSearches = (listOf(query) + recentSearches).distinct().take(5)
+                            if(query.isNotEmpty()){
+                                recentSearches = (listOf(query) + recentSearches).distinct().take(5)
+                            }
 
                             // Close the dropdown after a search
                             expanded = false
                             focusManager.clearFocus() // Ensure the text input loses focus
+                            textFieldState.clearText()
                         },
                         expanded = expanded,
                         onExpandedChange = {
