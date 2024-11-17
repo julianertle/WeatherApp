@@ -1,6 +1,8 @@
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
@@ -45,6 +47,7 @@ fun SearchBarSample(weatherViewModel: WeatherViewModel = viewModel()) {
             .fillMaxWidth()
             .heightIn(max = 200.dp)
             .semantics { isTraversalGroup = true }
+
     ) {
         Column(
             modifier = Modifier
@@ -66,11 +69,9 @@ fun SearchBarSample(weatherViewModel: WeatherViewModel = viewModel()) {
                             if(query.isNotEmpty()){
                                 recentSearches = (listOf(query) + recentSearches).distinct().take(5)
                             }
-
-                            // Close the dropdown after a search
-                            expanded = false
                             focusManager.clearFocus() // Ensure the text input loses focus
                             textFieldState.clearText()
+                            expanded = false
                         },
                         expanded = expanded,
                         onExpandedChange = {
@@ -93,6 +94,7 @@ fun SearchBarSample(weatherViewModel: WeatherViewModel = viewModel()) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .heightIn(max = 300.dp)
+                            .padding(8.dp) // Optional: Add padding to the dropdown
                     ) {
                         // Display recent searches
                         items(recentSearches.size) { idx ->
@@ -119,7 +121,6 @@ fun SearchBarSample(weatherViewModel: WeatherViewModel = viewModel()) {
                             )
                         }
                     }
-
                 }
             }
         }

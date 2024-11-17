@@ -15,7 +15,14 @@ import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun ForecastWeatherView() {
-    SearchBarSample()
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp) // Same padding as the lower part
+    ) {
+        SearchBarSample()
+    }
 
     Row(
         modifier = Modifier

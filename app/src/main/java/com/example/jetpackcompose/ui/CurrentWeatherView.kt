@@ -20,7 +20,14 @@ import java.util.*
 @Composable
 fun CurrentWeatherView(currentWeather: WeatherData?, iconUrl: String?) {
 
-    SearchBarSample()
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp) // Same padding as the lower part
+    ) {
+        SearchBarSample()
+    }
+
 
     currentWeather?.let {
 
