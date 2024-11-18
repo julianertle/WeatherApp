@@ -134,7 +134,7 @@ fun CurrentWeatherView(currentWeather: WeatherData?, iconUrl: String?) {
 
     } ?: Text(
         text = "No current weather data available.",
-        style = MaterialTheme.typography.bodyLarge,
+        style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp),  // Increased font size
         color = Color.Gray,
         modifier = Modifier.padding(16.dp)
     )

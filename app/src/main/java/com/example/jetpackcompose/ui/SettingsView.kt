@@ -25,6 +25,7 @@ import androidx.compose.material3.Card
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.graphics.Color
 
 val Context.dataStore by preferencesDataStore(name = "settings")
 private val API_TOKEN_KEY = stringPreferencesKey("api_token_key")
@@ -157,13 +158,16 @@ fun SettingsView(onSave: () -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 32.dp),
-            shape = RoundedCornerShape(50.dp)  // Rounded corners for the button
+            shape = RoundedCornerShape(50.dp),  // Rounded corners for the button
+            colors = ButtonDefaults.buttonColors(
+                Color(0xFF1E88E5)  // Set background color
+            )
         ) {
             Text(
                 text = "Save",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Medium,
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(8.dp),
             )
         }
     }
