@@ -3,7 +3,6 @@ package com.example.jetpackcompose.api
 import android.util.Log
 import com.example.jetpackcompose.data.ForecastResponse
 import com.example.jetpackcompose.data.WeatherData
-import com.example.jetpackcompose.data.WeatherForecastData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient

@@ -58,7 +58,7 @@ fun WeatherApp(viewModel: WeatherViewModel) {
                 }
 
                 if (selectedItem == 1) {
-                    ForecastWeatherView()
+                    ForecastWeatherView(forecast = forecast) // Pass the viewModel here
 
                 }
 
