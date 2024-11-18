@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material3.CardElevation
 import androidx.compose.ui.text.TextStyle
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -24,23 +23,30 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.map
 import androidx.compose.material3.Card
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
+import androidx.compose.runtime.LaunchedEffect
 
 val Context.dataStore by preferencesDataStore(name = "settings")
 private val API_TOKEN_KEY = stringPreferencesKey("api_token_key")
+private val HOMETOWN_KEY = stringPreferencesKey("hometown_key")  // New key for hometown
 
 @Composable
-fun SettingsView() {
+fun SettingsView(onSave: () -> Unit) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var apiToken by remember { mutableStateOf("") }
+    var hometown by remember { mutableStateOf("") }  // State for hometown
     var showInfoDialog by remember { mutableStateOf(false) }
 
-    // Load the saved API token on startup
+    // Load the saved values (API token and hometown) on startup
     LaunchedEffect(Unit) {
         context.dataStore.data.map { preferences ->
-            preferences[API_TOKEN_KEY] ?: ""
+            val apiToken = preferences[API_TOKEN_KEY] ?: ""
+            val hometown = preferences[HOMETOWN_KEY] ?: ""
+            Pair(apiToken, hometown)
         }.collect {
-            apiToken = it
+            apiToken = it.first
+            hometown = it.second
         }
     }
 
@@ -51,28 +57,73 @@ fun SettingsView() {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally  // Centering content horizontally
     ) {
-        // Input Section in a Card with elevation
+        // Hometown Section (Above API Token input)
+        Text(
+            text = "Enter your hometown:",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
 
+        // Hometown TextField inside the Card
         Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 24.dp),
-            elevation = CardDefaults.cardElevation(
-                defaultElevation = 10.dp
-            ),
+            elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
             shape = RoundedCornerShape(16.dp)
         ) {
             Column(
                 modifier = Modifier.padding(16.dp)
             ) {
+                TextField(
+                    value = hometown,
+                    onValueChange = { hometown = it },
+                    textStyle = TextStyle(
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Normal
+                    ),
+                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text("Hometown") }
+                )
+            }
+        }
+
+        // Input Section for API Token (same as before)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically, // Align text and icon vertically
+            ) {
                 Text(
                     text = "Enter API Token",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(bottom = 8.dp)
                 )
 
-                // TextField inside the Card
+                // Icon Button for info
+                IconButton(onClick = { showInfoDialog = true }) {
+                    Icon(imageVector = Icons.Default.Info, contentDescription = "Info")
+                }
+            }
+        }
+
+
+
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 24.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
                 TextField(
                     value = apiToken,
                     onValueChange = { apiToken = it },
@@ -80,14 +131,10 @@ fun SettingsView() {
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Normal
                     ),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text("API Token") }
                 )
             }
-        }
-
-        // Icon Button for info
-        IconButton(onClick = { showInfoDialog = true }) {
-            Icon(imageVector = Icons.Default.Info, contentDescription = "Info")
         }
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -96,10 +143,15 @@ fun SettingsView() {
         Button(
             onClick = {
                 scope.launch {
-                    // Save API token
+                    // Save API token and hometown
                     context.dataStore.edit { preferences ->
                         preferences[API_TOKEN_KEY] = apiToken
+                        preferences[HOMETOWN_KEY] = hometown  // Save hometown
                     }
+                    // Wait for 0.5 seconds before switching
+                    delay(500) // 500 milliseconds delay
+                    // Trigger onSave callback to navigate to Home
+                    onSave()
                 }
             },
             modifier = Modifier

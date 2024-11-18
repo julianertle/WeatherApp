@@ -60,11 +60,10 @@ fun WeatherApp(viewModel: WeatherViewModel) {
 
                 if (selectedItem == 1) {
                     ForecastWeatherView(forecast = forecast) // Pass the viewModel here
-
                 }
 
                 if (selectedItem == 2) {
-                    SettingsView()
+                    SettingsView(onSave = { selectedItem = 0 }) // Navigate back to Home (0 index)
                 }
             }
 
