@@ -63,13 +63,18 @@ fun SearchBarSample(weatherViewModel: WeatherViewModel = viewModel(),selectedMen
                         state = textFieldState,
                         onSearch = { query ->
                             println("Search input: $query")
-                            weatherViewModel.fetchWeatherData(query)
+
 
                             if(query.isNotEmpty()){
+                                if(selectedMenu == "Home"){
+                                    weatherViewModel.fetchWeatherData(query)
+                                    recentSearches = (listOf(query) + recentSearches).distinct().take(5)
+                                }
+                                else if (selectedMenu == "Forecast"){
+                                    weatherViewModel.fetchForecastData(query)
+                                    recentSearches = (listOf(query) + recentSearches).distinct().take(5)
+                                }
 
-
-
-                                recentSearches = (listOf(query) + recentSearches).distinct().take(5)
                             }
                             focusManager.clearFocus()
                             textFieldState.clearText()

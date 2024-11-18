@@ -1,6 +1,7 @@
 package com.example.jetpackcompose.api
 
 import android.util.Log
+import com.example.jetpackcompose.data.ForecastResponse
 import com.example.jetpackcompose.data.WeatherData
 import com.example.jetpackcompose.data.WeatherForecastData
 import kotlinx.coroutines.Dispatchers
@@ -38,7 +39,7 @@ object WeatherApiService {
             @Query("q") city: String,
             @Query("appid") apiKey: String = API_KEY,
             @Query("units") units: String = "metric"
-        ): retrofit2.Response<WeatherForecastData>
+        ): retrofit2.Response<ForecastResponse>
     }
 
     suspend fun fetchWeather(city: String): WeatherData? {
@@ -60,7 +61,7 @@ object WeatherApiService {
         }
     }
 
-    suspend fun fetchForecast(city: String): WeatherForecastData? {
+    suspend fun fetchForecast(city: String): ForecastResponse? {
         return try {
             withContext(Dispatchers.IO) {
                 val response = api.fetchForecast(city)
