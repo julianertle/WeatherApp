@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,15 +21,20 @@ import java.util.*
 
 @Composable
 fun CurrentWeatherView(currentWeather: WeatherData?, iconUrl: String?) {
+    val searchQuery = rememberSaveable { mutableStateOf("") }
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp) // Same padding as the lower part
     ) {
-        SearchBarSample(selectedMenu = "Home")
+        SearchBarSample(
+            selectedMenu = "Home",
+            onQueryChanged = { query ->
+                searchQuery.value = query // Update the search query when the input changes
+            }
+        )
     }
-
 
     currentWeather?.let {
 
@@ -36,7 +43,7 @@ fun CurrentWeatherView(currentWeather: WeatherData?, iconUrl: String?) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
-                .background(Color(0xFFE3F2FD), RoundedCornerShape(32.dp)) // Light gray background with rounded corners
+                .background(Color(0xFFBBDEFB), RoundedCornerShape(32.dp)) // Light gray background with rounded corners
                 .padding(16.dp) // Padding inside the background
         ) {
             // Row to display city name and country

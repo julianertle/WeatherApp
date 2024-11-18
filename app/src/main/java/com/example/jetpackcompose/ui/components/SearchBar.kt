@@ -26,12 +26,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.jetpackcompose.model.WeatherViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
 @Composable
-fun SearchBarSample(weatherViewModel: WeatherViewModel = viewModel(),selectedMenu: String = "") {
+fun SearchBarSample(
+    weatherViewModel: WeatherViewModel = viewModel(),
+    selectedMenu: String = "",
+    onQueryChanged: (String) -> Unit
+) {
     val textFieldState = rememberTextFieldState()
     var expanded by rememberSaveable { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
+    var query by rememberSaveable { mutableStateOf("") }
 
     // A list to store recent searches
     var recentSearches by rememberSaveable { mutableStateOf(listOf<String>()) }
@@ -44,7 +48,6 @@ fun SearchBarSample(weatherViewModel: WeatherViewModel = viewModel(),selectedMen
             .fillMaxWidth()
             .heightIn(max = 200.dp)
             .semantics { isTraversalGroup = true }
-
     ) {
         Column(
             modifier = Modifier
@@ -53,33 +56,32 @@ fun SearchBarSample(weatherViewModel: WeatherViewModel = viewModel(),selectedMen
         ) {
             // Search Bar
             SearchBar(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 inputField = {
                     SearchBarDefaults.InputField(
                         state = textFieldState,
-                        onSearch = { query ->
-                            println("Search input: $query")
+                        onSearch = { inputQuery ->
+                            query = inputQuery
+                            onQueryChanged(query)  // Pass the query back to the parent composable
+                            println("Search input: $inputQuery")
 
-
-                            if(query.isNotEmpty()){
-                                if(selectedMenu == "Home"){
-                                    weatherViewModel.fetchWeatherData(query)
-                                    recentSearches = (listOf(query) + recentSearches).distinct().take(5)
+                            // Perform actions based on selectedMenu
+                            if (inputQuery.isNotEmpty()) {
+                                when (selectedMenu) {
+                                    "Home" -> weatherViewModel.fetchWeatherData(inputQuery)
+                                    "Forecast" -> weatherViewModel.fetchForecastData(inputQuery)
                                 }
-                                else if (selectedMenu == "Forecast"){
-                                    weatherViewModel.fetchForecastData(query)
-                                    recentSearches = (listOf(query) + recentSearches).distinct().take(5)
-                                }
-
+                                // Update recent searches
+                                recentSearches = (listOf(inputQuery) + recentSearches).distinct().take(5)
                             }
+
+                            // Clear the text field and close the keyboard
                             focusManager.clearFocus()
                             textFieldState.clearText()
                             expanded = false
                         },
                         expanded = expanded,
                         onExpandedChange = {
-                            // Only allow expansion if recentSearches is not empty
                             expanded = it && recentSearches.isNotEmpty()
                         },
                         placeholder = { Text("Search any city") },
@@ -89,18 +91,17 @@ fun SearchBarSample(weatherViewModel: WeatherViewModel = viewModel(),selectedMen
                 },
                 expanded = expanded,
                 onExpandedChange = {
-                    // Only allow expansion if recentSearches is not empty
                     expanded = it && recentSearches.isNotEmpty()
                 },
             ) {
+                // Display recent searches if expanded
                 if (recentSearches.isNotEmpty() && expanded) {
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
                             .heightIn(max = 300.dp)
-                            .padding(8.dp) // Optional: Add padding to the dropdown
+                            .padding(8.dp)
                     ) {
-                        // Display recent searches
                         items(recentSearches.size) { idx ->
                             val resultText = recentSearches[idx]
                             ListItem(
@@ -109,15 +110,13 @@ fun SearchBarSample(weatherViewModel: WeatherViewModel = viewModel(),selectedMen
                                 colors = ListItemDefaults.colors(containerColor = Color.Transparent),
                                 modifier = Modifier
                                     .clickable {
-                                        // Set the text field with the selected search and activate `onSearch`
+                                        // Set the text and cursor, fetch weather, and close the suggestions
                                         textFieldState.setTextAndPlaceCursorAtEnd(resultText)
                                         expanded = false
                                         weatherViewModel.fetchWeatherData(resultText)
 
                                         // Update recent searches
                                         recentSearches = (listOf(resultText) + recentSearches).distinct().take(5)
-
-                                        // Clear focus from the input field
                                         focusManager.clearFocus()
                                     }
                                     .fillMaxWidth()
