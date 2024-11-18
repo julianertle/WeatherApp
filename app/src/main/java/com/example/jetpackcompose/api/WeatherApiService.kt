@@ -2,6 +2,7 @@ package com.example.jetpackcompose.api
 
 import android.util.Log
 import com.example.jetpackcompose.data.WeatherData
+import com.example.jetpackcompose.data.WeatherForecastData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -31,6 +32,13 @@ object WeatherApiService {
             @Query("appid") apiKey: String = API_KEY,
             @Query("units") units: String = "metric" // Add the units parameter with a default value
         ): retrofit2.Response<WeatherData>
+
+        @GET("forecast")
+        suspend fun fetchForecast(
+            @Query("q") city: String,
+            @Query("appid") apiKey: String = API_KEY,
+            @Query("units") units: String = "metric"
+        ): retrofit2.Response<WeatherForecastData>
     }
 
     suspend fun fetchWeather(city: String): WeatherData? {
@@ -52,5 +60,20 @@ object WeatherApiService {
         }
     }
 
-
+    suspend fun fetchForecast(city: String): WeatherForecastData? {
+        return try {
+            withContext(Dispatchers.IO) {
+                val response = api.fetchForecast(city)
+                if (response.isSuccessful) {
+                    response.body()
+                } else {
+                    Log.e("WeatherApiService", "Failed to fetch forecast for $city: ${response.code()}")
+                    null
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("WeatherApiService", "Error fetching forecast data for $city: ${e.message}")
+            null
+        }
+    }
 }

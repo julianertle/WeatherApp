@@ -25,7 +25,7 @@ fun CurrentWeatherView(currentWeather: WeatherData?, iconUrl: String?) {
             .fillMaxWidth()
             .padding(horizontal = 16.dp) // Same padding as the lower part
     ) {
-        SearchBarSample()
+        SearchBarSample(selectedMenu = "Home")
     }
 
 

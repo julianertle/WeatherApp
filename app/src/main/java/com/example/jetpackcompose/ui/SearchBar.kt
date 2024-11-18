@@ -31,7 +31,7 @@ import kotlin.math.exp
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
-fun SearchBarSample(weatherViewModel: WeatherViewModel = viewModel()) {
+fun SearchBarSample(weatherViewModel: WeatherViewModel = viewModel(),selectedMenu: String = "") {
     val textFieldState = rememberTextFieldState()
     var expanded by rememberSaveable { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
@@ -65,11 +65,13 @@ fun SearchBarSample(weatherViewModel: WeatherViewModel = viewModel()) {
                             println("Search input: $query")
                             weatherViewModel.fetchWeatherData(query)
 
-                            // Update recent searches
                             if(query.isNotEmpty()){
+
+
+
                                 recentSearches = (listOf(query) + recentSearches).distinct().take(5)
                             }
-                            focusManager.clearFocus() // Ensure the text input loses focus
+                            focusManager.clearFocus()
                             textFieldState.clearText()
                             expanded = false
                         },

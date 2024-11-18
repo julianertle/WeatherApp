@@ -59,6 +59,7 @@ fun WeatherApp(viewModel: WeatherViewModel) {
 
                 if (selectedItem == 1) {
                     ForecastWeatherView()
+
                 }
 
                 if (selectedItem == 2) {
