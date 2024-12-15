@@ -19,9 +19,9 @@ class WeatherViewModel() : ViewModel() {
     private val _iconUrl = MutableStateFlow<String?>(null) // For weather icon
     val iconUrl: StateFlow<String?> get() = _iconUrl
 
-    fun fetchWeatherData(city: String) {
+    fun fetchWeatherData(city: String,apiKey: String) {
         viewModelScope.launch {
-            val weatherData = WeatherApiService.fetchWeather(city)
+            val weatherData = WeatherApiService.fetchWeather(city,apiKey)
             if (weatherData != null) {
                 _currentWeather.value = weatherData
                 val iconId = weatherData.weather.firstOrNull()?.icon ?: ""
@@ -37,9 +37,9 @@ class WeatherViewModel() : ViewModel() {
         }
     }
 
-    fun fetchForecastData(city: String) {
+    fun fetchForecastData(city: String, apiKey: String) {
         viewModelScope.launch {
-            val forecastResponse = WeatherApiService.fetchForecast(city)
+            val forecastResponse = WeatherApiService.fetchForecast(city, apiKey)
             if (forecastResponse != null) {
                 _forecast.value = forecastResponse.list // Now correctly matches the type
             }

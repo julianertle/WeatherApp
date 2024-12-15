@@ -30,6 +30,7 @@ import com.example.jetpackcompose.model.WeatherViewModel
 fun SearchBarSample(
     weatherViewModel: WeatherViewModel = viewModel(),
     selectedMenu: String = "",
+    apiKey: String,  // Add apiKey as a parameter
     onQueryChanged: (String) -> Unit
 ) {
     val textFieldState = rememberTextFieldState()
@@ -68,8 +69,8 @@ fun SearchBarSample(
                             // Perform actions based on selectedMenu
                             if (inputQuery.isNotEmpty()) {
                                 when (selectedMenu) {
-                                    "Home" -> weatherViewModel.fetchWeatherData(inputQuery)
-                                    "Forecast" -> weatherViewModel.fetchForecastData(inputQuery)
+                                    "Home" -> weatherViewModel.fetchWeatherData(inputQuery, apiKey)
+                                    "Forecast" -> weatherViewModel.fetchForecastData(inputQuery, apiKey)
                                 }
                                 // Update recent searches
                                 recentSearches = (listOf(inputQuery) + recentSearches).distinct().take(5)
@@ -113,7 +114,7 @@ fun SearchBarSample(
                                         // Set the text and cursor, fetch weather, and close the suggestions
                                         textFieldState.setTextAndPlaceCursorAtEnd(resultText)
                                         expanded = false
-                                        weatherViewModel.fetchWeatherData(resultText)
+                                        weatherViewModel.fetchWeatherData(resultText, apiKey)
 
                                         // Update recent searches
                                         recentSearches = (listOf(resultText) + recentSearches).distinct().take(5)

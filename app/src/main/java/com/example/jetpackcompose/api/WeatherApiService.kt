@@ -29,22 +29,22 @@ object WeatherApiService {
         @GET("weather")
         suspend fun fetchWeather(
             @Query("q") city: String,
-            @Query("appid") apiKey: String = API_KEY,
+            @Query("appid") apiKey: String,
             @Query("units") units: String = "metric" // Add the units parameter with a default value
         ): retrofit2.Response<WeatherData>
 
         @GET("forecast")
         suspend fun fetchForecast(
             @Query("q") city: String,
-            @Query("appid") apiKey: String = API_KEY,
+            @Query("appid") apiKey: String,
             @Query("units") units: String = "metric"
         ): retrofit2.Response<ForecastResponse>
     }
 
-    suspend fun fetchWeather(city: String): WeatherData? {
+    suspend fun fetchWeather(city: String, apiKey: String): WeatherData? {
         return try {
             withContext(Dispatchers.IO) {
-                val response = api.fetchWeather(city)
+                val response = api.fetchWeather(city,apiKey)
 
                 if (response.isSuccessful) {
                     response.body() // Automatically parsed into WeatherData
@@ -60,10 +60,10 @@ object WeatherApiService {
         }
     }
 
-    suspend fun fetchForecast(city: String): ForecastResponse? {
+    suspend fun fetchForecast(city: String, apiKey: String): ForecastResponse? {
         return try {
             withContext(Dispatchers.IO) {
-                val response = api.fetchForecast(city)
+                val response = api.fetchForecast(city,apiKey)
                 if (response.isSuccessful) {
                     response.body()
                 } else {

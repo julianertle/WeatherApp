@@ -35,18 +35,21 @@ fun CurrentWeatherView(currentWeather: WeatherData?, iconUrl: String?) {
     val iconUrl by weatherViewModel.iconUrl.collectAsState()
 
     var hometown by remember { mutableStateOf("") }
+    var apiKey by remember { mutableStateOf("") }
 
     val context = LocalContext.current
 
-    // Retrieve hometown from DataStore when the view is opened
+    // Retrieve hometown and apiKey from DataStore when the view is opened
     LaunchedEffect(Unit) {
-        context.dataStore.data.map { preferences ->
-            preferences[Keys.HOMETOWN_KEY] ?: ""
-        }.collect { savedHometown ->
-            hometown = savedHometown
+        // Collect both hometown and apiKey
+        context.dataStore.data.collect { preferences ->
+            // Retrieve values from DataStore
+            hometown = preferences[Keys.HOMETOWN_KEY] ?: ""
+            apiKey = preferences[Keys.API_TOKEN_KEY] ?: ""  // Ensure you have a key in the DataStore for API_KEY
+
             // Automatically fetch weather for hometown if it exists
             if (hometown.isNotEmpty()) {
-                weatherViewModel.fetchWeatherData(hometown)
+                weatherViewModel.fetchWeatherData(hometown, apiKey)
             }
         }
     }
@@ -61,10 +64,11 @@ fun CurrentWeatherView(currentWeather: WeatherData?, iconUrl: String?) {
         // Pass hometown as the initial query to the search bar
         SearchBarSample(
             selectedMenu = "Home",
+            apiKey = apiKey,
             onQueryChanged = { query ->
                 searchQuery.value = query // Update the search query when the input changes
                 if (query.isNotEmpty()) {
-                    weatherViewModel.fetchWeatherData(query)
+                    weatherViewModel.fetchWeatherData(query,apiKey)
                 }
             }
         )
