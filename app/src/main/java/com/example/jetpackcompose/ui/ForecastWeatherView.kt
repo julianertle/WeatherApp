@@ -2,20 +2,33 @@ package com.example.jetpackcompose.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import com.example.jetpackcompose.data.ForecastItem
 import com.example.jetpackcompose.ui.components.WeatherCard
-import SearchBarSample
+import com.example.jetpackcompose.data.Keys
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.flow.map
 
 @Composable
 fun ForecastWeatherView(forecast: List<ForecastItem>) {
+    val context = LocalContext.current
+    var hometown by remember { mutableStateOf("") }
+
+    // Retrieve hometown from DataStore
+    LaunchedEffect(Unit) {
+        context.dataStore.data.map { preferences ->
+            preferences[Keys.HOMETOWN_KEY] ?: ""
+        }.collect { savedHometown ->
+            hometown = savedHometown
+        }
+    }
+
     val searchQuery = rememberSaveable { mutableStateOf("") }
 
     Column(
@@ -23,25 +36,12 @@ fun ForecastWeatherView(forecast: List<ForecastItem>) {
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
     ) {
-        // Fixed SearchBar
-        SearchBarSample(selectedMenu = "Forecast", onQueryChanged = { query ->
-            searchQuery.value = query  // Update the search query state
-        })
+        Text(
+            text = "Forecast for $hometown",
+            style = MaterialTheme.typography.h6,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
 
-        // Display the entered query below the search bar
-        if (searchQuery.value.isNotEmpty()) {
-            Text(
-                text = "5 days weather forecast for ${searchQuery.value}:",
-                style = MaterialTheme.typography.h6,
-                modifier = Modifier
-                    .padding(top = 16.dp)
-                    .align(Alignment.CenterHorizontally)  // Center the text horizontally
-            )
-            Spacer(modifier = Modifier.height(16.dp)) // Adjust height as needed
-        }
-
-
-        // Scrollable content below the SearchBar
         LazyColumn(
             modifier = Modifier.fillMaxWidth()
         ) {
