@@ -172,7 +172,7 @@ fun CurrentWeatherView(currentWeather: WeatherData?, iconUrl: String?) {
         )
     } else {
         Text(
-            text = "Set your hometown in settings to view weather.",
+            text = "Set your hometown in settings.",
             style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp),
             color = Color.Gray,
             modifier = Modifier.padding(16.dp)

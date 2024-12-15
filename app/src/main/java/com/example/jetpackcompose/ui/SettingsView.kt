@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.delay
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 
 val Context.dataStore by preferencesDataStore(name = "settings")
 
@@ -55,6 +56,7 @@ fun SettingsView(onSave: () -> Unit) {
             value = hometown,
             onValueChange = { hometown = it },
             label = { Text("Hometown") },
+            textStyle = TextStyle(fontSize = 20.sp),  // Adjust font size here
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -67,6 +69,7 @@ fun SettingsView(onSave: () -> Unit) {
             value = apiToken,
             onValueChange = { apiToken = it },
             label = { Text("API Token") },
+            textStyle = TextStyle(fontSize = 20.sp),  // Adjust font size here
             modifier = Modifier.fillMaxWidth()
         )
 

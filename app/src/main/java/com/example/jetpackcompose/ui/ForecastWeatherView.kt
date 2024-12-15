@@ -11,8 +11,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.flow.map
 
 @Composable
@@ -40,9 +42,10 @@ fun ForecastWeatherView(forecast: List<ForecastItem>) {
         if (hometown.isEmpty()) {
             Text(
                 text = "Set your hometown in settings",
-                style = MaterialTheme.typography.body1,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
+                style = androidx.compose.material3.MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp),
+                modifier = Modifier.padding(16.dp),
+                color = Color.Gray,
+                )
         } else {
             // Display forecast if hometown is set
             Text(

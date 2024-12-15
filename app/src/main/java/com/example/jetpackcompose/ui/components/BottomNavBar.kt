@@ -1,4 +1,3 @@
-// BottomNavBar.kt
 package com.example.jetpackcompose.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,28 +13,51 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun BottomNavBar(selectedItem: Int, onItemSelected: (Int) -> Unit, modifier: Modifier = Modifier, color: Color) {
+fun BottomNavBar(
+    selectedItem: Int,
+    onItemSelected: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+    color: Color,
+) {
     BottomNavigation(
-        modifier = modifier.fillMaxWidth(), // Now accepts modifier
+        modifier = modifier.fillMaxWidth(),
         backgroundColor = color
     ) {
         BottomNavigationItem(
             selected = selectedItem == 0,
             onClick = { onItemSelected(0) },
             label = { Text("Home") },
-            icon = { Icon(imageVector = Icons.Filled.Home, contentDescription = "Home") }
+            icon = {
+                Icon(
+                    imageVector = Icons.Filled.Home,
+                    contentDescription = "Home",
+                    tint = if (selectedItem == 0) Color.White else Color.Black // Change color when selected
+                )
+            }
         )
         BottomNavigationItem(
             selected = selectedItem == 1,
             onClick = { onItemSelected(1) },
             label = { Text("Forecast") },
-            icon = { Icon(imageVector = Icons.Filled.Schedule, contentDescription = "Forecast") }
+            icon = {
+                Icon(
+                    imageVector = Icons.Filled.Schedule,
+                    contentDescription = "Forecast",
+                    tint = if (selectedItem == 1) Color.White else Color.Black // Change color when selected
+                )
+            }
         )
         BottomNavigationItem(
             selected = selectedItem == 2,
             onClick = { onItemSelected(2) },
             label = { Text("Settings") },
-            icon = { Icon(imageVector = Icons.Filled.Settings, contentDescription = "Settings") }
+            icon = {
+                Icon(
+                    imageVector = Icons.Filled.Settings,
+                    contentDescription = "Settings",
+                    tint = if (selectedItem == 2) Color.White else Color.Black // Change color when selected
+                )
+            }
         )
     }
 }
