@@ -36,12 +36,21 @@ fun ForecastWeatherView(forecast: List<ForecastItem>) {
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
     ) {
-        Text(
-            text = "Forecast for $hometown",
-            style = MaterialTheme.typography.h6,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-
+        // Display message if hometown is empty
+        if (hometown.isEmpty()) {
+            Text(
+                text = "Set your hometown in settings",
+                style = MaterialTheme.typography.body1,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+        } else {
+            // Display forecast if hometown is set
+            Text(
+                text = "Forecast for $hometown",
+                style = MaterialTheme.typography.h6,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+        }
         LazyColumn(
             modifier = Modifier.fillMaxWidth()
         ) {
