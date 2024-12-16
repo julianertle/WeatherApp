@@ -11,6 +11,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -74,25 +75,38 @@ fun ForecastWeatherView(forecast: List<ForecastItem>) {
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .fillMaxSize() // Use fillMaxSize for centering within the entire screen
+            .padding(horizontal = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally, // Center horizontally
+        verticalArrangement = Arrangement.Top // Align items to the top
     ) {
+
+        Spacer(modifier = Modifier.height(24.dp)) // Add space between the search bar and the forecast header
+
         // Display message if hometown is empty
         if (hometown.isEmpty()) {
             Text(
                 text = "Set your hometown in settings",
-                style = androidx.compose.material3.MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp),
-                modifier = Modifier.padding(16.dp),
-                color = Color.Gray,
-                )
+                style = androidx.compose.material3.MaterialTheme.typography.bodyLarge.copy(
+                    fontSize = 24.sp, // Make the text bigger
+                    color = Color.Gray
+                ),
+                modifier = Modifier.padding(16.dp)
+            )
         } else {
             // Display forecast if hometown is set
             Text(
                 text = "Forecast for $hometown",
-                style = MaterialTheme.typography.h6,
-                modifier = Modifier.padding(bottom = 16.dp)
+                style = MaterialTheme.typography.h4.copy( // Use h4 for larger font
+                    fontSize = 28.sp, // Increase font size
+                    color = Color.Black // Optional: Highlight with theme color
+                ),
+                modifier = Modifier
+                    .padding(bottom = 32.dp)
+                    .align(Alignment.CenterHorizontally) // Explicitly center horizontally
             )
         }
+
         LazyColumn(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -101,4 +115,5 @@ fun ForecastWeatherView(forecast: List<ForecastItem>) {
             }
         }
     }
+
 }

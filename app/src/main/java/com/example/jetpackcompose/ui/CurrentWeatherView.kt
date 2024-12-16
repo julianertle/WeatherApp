@@ -190,10 +190,12 @@ fun CurrentWeatherView(currentWeather: WeatherData?, iconUrl: String?) {
             modifier = Modifier.padding(16.dp)
         )
     } else {
+        Spacer(modifier = Modifier.height(24.dp)) // Add space between the search bar and the forecast header
+
         // Show this message only when no search query and no hometown are set
         Text(
-            text = "Set your hometown in settings.",
-            style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp),
+            text = "Set your hometown in settings",
+            style = MaterialTheme.typography.bodyLarge.copy(fontSize = 24.sp),
             color = Color.Gray,
             modifier = Modifier.padding(16.dp)
         )
