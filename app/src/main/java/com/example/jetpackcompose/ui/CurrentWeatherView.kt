@@ -89,8 +89,8 @@ fun CurrentWeatherView(currentWeather: WeatherData?, iconUrl: String?) {
     }
 
 
-    // If hometown is set, show the weather data for that location
-    if (hometown.isNotEmpty()) {
+    // If a search query exists or weather data is loaded, show the weather data
+    if (searchQuery.value.isNotEmpty() || hometown.isNotEmpty()) {
         currentWeather?.let {
             // Display current weather details
             Column(
@@ -190,6 +190,7 @@ fun CurrentWeatherView(currentWeather: WeatherData?, iconUrl: String?) {
             modifier = Modifier.padding(16.dp)
         )
     } else {
+        // Show this message only when no search query and no hometown are set
         Text(
             text = "Set your hometown in settings.",
             style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp),
@@ -197,6 +198,7 @@ fun CurrentWeatherView(currentWeather: WeatherData?, iconUrl: String?) {
             modifier = Modifier.padding(16.dp)
         )
     }
+
 }
 
 fun convertUnixToTime(timestamp: Long): String {
