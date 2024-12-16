@@ -47,7 +47,7 @@ fun ForecastWeatherView(forecast: List<ForecastItem>) {
 
             // Automatically fetch weather for hometown if it exists
             if (hometown.isNotEmpty()) {
-                weatherViewModel.fetchWeatherData(hometown, apiKey)
+                weatherViewModel.fetchForecastData(hometown, apiKey)
             }
         }
     }

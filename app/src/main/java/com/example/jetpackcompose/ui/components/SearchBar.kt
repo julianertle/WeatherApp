@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 // Imports for TextField and SearchBar specific components
@@ -36,7 +35,7 @@ fun SearchBarSample(
     val textFieldState = rememberTextFieldState()
     var expanded by rememberSaveable { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
-    var query by rememberSaveable { mutableStateOf("") }
+    var cityName by rememberSaveable { mutableStateOf("") }
 
     // A list to store recent searches
     var recentSearches by rememberSaveable { mutableStateOf(listOf<String>()) }
@@ -62,8 +61,8 @@ fun SearchBarSample(
                     SearchBarDefaults.InputField(
                         state = textFieldState,
                         onSearch = { inputQuery ->
-                            query = inputQuery
-                            onQueryChanged(query)  // Pass the query back to the parent composable
+                            cityName = inputQuery
+                            onQueryChanged(cityName)  // Pass the query back to the parent composable
                             println("Search input: $inputQuery")
 
                             // Perform actions based on selectedMenu
