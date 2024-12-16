@@ -25,7 +25,7 @@ fun WeatherApp(viewModel: WeatherViewModel) {
         Column(modifier = Modifier.fillMaxSize()) {
             Box(
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(1f) // Takes remaining space above
                     .fillMaxWidth()
                     .background(upperHalfColor)
             )
@@ -37,6 +37,7 @@ fun WeatherApp(viewModel: WeatherViewModel) {
             )
         }
 
+        // Main content area
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -46,7 +47,7 @@ fun WeatherApp(viewModel: WeatherViewModel) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(bottom = 0.dp),
+                    .padding(bottom = 56.dp), // Add enough padding to prevent overlap with bottom nav bar
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(modifier = Modifier.height(16.dp))

@@ -17,6 +17,7 @@ import com.example.jetpackcompose.data.Keys
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.delay
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 
@@ -42,38 +43,42 @@ fun SettingsView(onSave: () -> Unit) {
         }
     }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(16.dp)
     ) {
-        // Hometown input
-        Text("Enter your hometown:", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-        Spacer(modifier = Modifier.height(8.dp))
-        TextField(
-            value = hometown,
-            onValueChange = { hometown = it },
-            label = { Text("Hometown") },
-            textStyle = TextStyle(fontSize = 20.sp),  // Adjust font size here
-            modifier = Modifier.fillMaxWidth()
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.TopCenter) // Align content at the top
+        ) {
+            // Hometown input
+            Text("Enter your hometown:", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(8.dp))
+            TextField(
+                value = hometown,
+                onValueChange = { hometown = it },
+                label = { Text("Hometown") },
+                textStyle = TextStyle(fontSize = 20.sp),  // Adjust font size here
+                modifier = Modifier.fillMaxWidth()
+            )
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-        // API token input
-        Text("Enter API Token:", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-        Spacer(modifier = Modifier.height(8.dp))
-        TextField(
-            value = apiToken,
-            onValueChange = { apiToken = it },
-            label = { Text("API Token") },
-            textStyle = TextStyle(fontSize = 20.sp),  // Adjust font size here
-            modifier = Modifier.fillMaxWidth()
-        )
+            // API token input
+            Text("Enter API Token:", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(8.dp))
+            TextField(
+                value = apiToken,
+                onValueChange = { apiToken = it },
+                label = { Text("API Token") },
+                textStyle = TextStyle(fontSize = 20.sp),  // Adjust font size here
+                modifier = Modifier.fillMaxWidth()
+            )
 
-        Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(24.dp))
+        }
 
         Button(
             onClick = {
@@ -86,9 +91,15 @@ fun SettingsView(onSave: () -> Unit) {
                     onSave()
                 }
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter), // Align button at the bottom
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF1E88E5) // Set the button color
+            )
         ) {
-            Text("Save")
+            Text("Save", color = Color.White) // Set text color to white for better contrast
         }
+
     }
 }
