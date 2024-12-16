@@ -37,6 +37,8 @@ fun CurrentWeatherView(currentWeather: WeatherData?, iconUrl: String?) {
     var hometown by remember { mutableStateOf("") }
     var apiKey by remember { mutableStateOf("") }
 
+    val errorMessage by weatherViewModel.errorMessage.collectAsState()
+
     val context = LocalContext.current
 
     // Retrieve hometown and apiKey from DataStore when the view is opened
@@ -73,6 +75,19 @@ fun CurrentWeatherView(currentWeather: WeatherData?, iconUrl: String?) {
             }
         )
     }
+
+    errorMessage?.let {
+        Text(
+            text = it,
+            color = Color.Red,
+            style = MaterialTheme.typography.bodyMedium.copy(fontSize = 25.sp), // Increase font size
+            modifier = Modifier
+                .padding(32.dp) // Add more padding for visibility
+                .fillMaxWidth() // Optionally, make the text take full width
+                .wrapContentWidth(Alignment.CenterHorizontally) // Center align text horizontally
+        )
+    }
+
 
     // If hometown is set, show the weather data for that location
     if (hometown.isNotEmpty()) {
