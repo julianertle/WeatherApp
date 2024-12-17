@@ -11,7 +11,7 @@ import androidx.core.app.NotificationCompat
 class PopupService : Service() {
 
     private val handler = Handler(Looper.getMainLooper())
-    private val delayMillis = 15000L // 15 seconds
+    private val delayMillis = 5000L // 5 seconds for demonstration
 
     // Runnable that will show a popup periodically
     private val showPopupRunnable = object : Runnable {
@@ -24,10 +24,9 @@ class PopupService : Service() {
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
-        startForeground(
-            1,
-            getNotification()
-        )
+
+        // Start the service in the foreground with a notification
+        startForeground(1, getNotification())
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -59,7 +58,7 @@ class PopupService : Service() {
     private fun getNotification(): Notification {
         return NotificationCompat.Builder(this, "popup_service_channel")
             .setContentTitle("Popup Service Running")
-            .setContentText("This service will show Hello World popups every 15 seconds.")
+            .setContentText("This service will show Hello World popups every 5 seconds.")
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .build()

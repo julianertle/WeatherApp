@@ -1,10 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Add the INTERNET permission as a direct child of <manifest> -->
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Permission to run foreground services -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <!-- Add the required permission for foreground service type dataSync -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -15,8 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.JetpackCompose"
-        tools:targetApi="31">
+        tools:targetApi="34">
 
+        <!-- Main activity declaration -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -28,12 +30,10 @@
             </intent-filter>
         </activity>
 
-        <!-- Declare the PopupService here -->
+        <!-- Declare the PopupService as a foreground service with a specified service type -->
         <service
             android:name=".service.PopupService"
-            android:foregroundServiceType="shortService"
-            android:exported="false" />
-
+            android:exported="false"
+            android:foregroundServiceType="dataSync"/>
     </application>
-
 </manifest>
