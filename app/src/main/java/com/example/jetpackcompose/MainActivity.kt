@@ -1,8 +1,11 @@
 package com.example.jetpackcompose
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.compose.setContent
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.jetpackcompose.data.WeatherRepositoryImpl
@@ -12,14 +15,33 @@ import com.example.jetpackcompose.service.PopupService
 import com.example.jetpackcompose.ui.WeatherApp
 
 class MainActivity : ComponentActivity() {
+    // Request permission result launcher
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (isGranted) {
+                // Permission granted, start the service
+                val serviceIntent = Intent(applicationContext, PopupService::class.java)
+                startService(serviceIntent)
+            } else {
+                // Permission denied, show a message
+                Toast.makeText(this, "Permission denied, notifications won't work", Toast.LENGTH_LONG).show()
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Start PopupService in the foreground
-        val serviceIntent = Intent(applicationContext, PopupService::class.java) // Use applicationContext here
-        startService(serviceIntent)
+        // Check if the device is running Android 13 or higher
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // Request the notification permission
+            requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            // If the device is running a lower version, no need for the permission
+            val serviceIntent = Intent(applicationContext, PopupService::class.java)
+            startService(serviceIntent)
+        }
 
-        // Load the UI
+        // Set up UI
         setContent {
             val viewModel: WeatherViewModel = viewModel(factory = WeatherViewModelFactory(
                 WeatherRepositoryImpl())
