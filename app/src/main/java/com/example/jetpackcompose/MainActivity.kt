@@ -20,8 +20,7 @@ class MainActivity : ComponentActivity() {
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
             if (isGranted) {
                 // Permission granted, start the service
-                val serviceIntent = Intent(applicationContext, PopupService::class.java)
-                startService(serviceIntent)
+                startPopupService()
             } else {
                 // Permission denied, show a message
                 Toast.makeText(this, "Permission denied, notifications won't work", Toast.LENGTH_LONG).show()
@@ -37,8 +36,7 @@ class MainActivity : ComponentActivity() {
             requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
         } else {
             // If the device is running a lower version, no need for the permission
-            val serviceIntent = Intent(applicationContext, PopupService::class.java)
-            startService(serviceIntent)
+            startPopupService()
         }
 
         // Set up UI
@@ -47,6 +45,18 @@ class MainActivity : ComponentActivity() {
                 WeatherRepositoryImpl())
             )
             WeatherApp(viewModel)
+        }
+    }
+
+    // Function to start the PopupService
+    private fun startPopupService() {
+        val serviceIntent = Intent(applicationContext, PopupService::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Start service as foreground
+            startForegroundService(serviceIntent)
+        } else {
+            // Start service normally for older versions
+            startService(serviceIntent)
         }
     }
 }
