@@ -26,10 +26,6 @@ class PopupServiceManager(private val context: Context) {
     // Start the PopupService
     fun startPopupService() {
         val serviceIntent = Intent(context, PopupService::class.java)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.startForegroundService(serviceIntent)
-        } else {
-            context.startService(serviceIntent)
-        }
+        context.startForegroundService(serviceIntent)
     }
 }

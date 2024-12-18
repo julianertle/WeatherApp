@@ -44,12 +44,9 @@ class WeatherViewModel : ViewModel() {
         //Todo
     }
 
-
     private fun fetchWeatherIcon(iconId: String) {
         if (iconId.isNotEmpty()) {
             _iconUrl.value = "https://openweathermap.org/img/wn/$iconId@2x.png"
         }
     }
-
-
 }

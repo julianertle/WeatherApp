@@ -35,24 +35,17 @@ class PopupService : Service() {
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
-        startForeground(1, getNotification("Popup Service Running"))
 
-        ContextCompat.registerReceiver(
-            this,
-            updateReceiver,
-            IntentFilter("com.example.jetpackcompose.UPDATE_TIMER"),
-            ContextCompat.RECEIVER_NOT_EXPORTED
-        )
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val timerOption = fetchTimerOptionFromSettings()
-            delayMillis = timerOptionToMillis(timerOption)
+        ////////////////////////////////////
 
-            if (delayMillis != -1L) {
-                isNotificationEnabled = true
-                handler.post(showNotificationRunnable)
-            }
-        }
+        //TODO starte den Service hier
+
+        ////////////////////////////////////
+
+
+        registerUpdateReceiver()
+        initializeTimerFromSettings()
     }
 
     override fun onDestroy() {
@@ -102,6 +95,16 @@ class PopupService : Service() {
         return timerOption
     }
 
+    private fun registerUpdateReceiver() {
+        ContextCompat.registerReceiver(
+            this,
+            updateReceiver,
+            IntentFilter("com.example.jetpackcompose.UPDATE_TIMER"),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
+    }
+
+
     private fun timerOptionToMillis(option: String): Long {
         return when (option) {
             "10s" -> 10_000L
@@ -112,6 +115,19 @@ class PopupService : Service() {
             else -> -1L
         }
     }
+
+    private fun initializeTimerFromSettings() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val timerOption = fetchTimerOptionFromSettings()
+            delayMillis = timerOptionToMillis(timerOption)
+
+            if (delayMillis != -1L) {
+                isNotificationEnabled = true
+                handler.post(showNotificationRunnable)
+            }
+        }
+    }
+
 
     private fun sendNotification(message: String) {
         if (ActivityCompat.checkSelfPermission(
