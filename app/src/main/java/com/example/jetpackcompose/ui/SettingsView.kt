@@ -1,6 +1,7 @@
 package com.example.jetpackcompose.ui
 
 import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -9,20 +10,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import kotlinx.coroutines.launch
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
-import com.example.jetpackcompose.data.Keys
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.delay
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.TextStyle
-
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-
+import com.example.jetpackcompose.data.Keys
+import com.example.jetpackcompose.service.PopupService
 
 val Context.dataStore by preferencesDataStore(name = "settings")
 
@@ -32,7 +31,7 @@ fun SettingsView(onSave: () -> Unit) {
     val scope = rememberCoroutineScope()
     var apiToken by remember { mutableStateOf("") }
     var hometown by remember { mutableStateOf("") }
-    var selectedTimerOption by remember { mutableStateOf("Deactivated") } // Default option
+    var selectedTimerOption by remember { mutableStateOf("Deactivated") }
     val timerOptions = listOf("Deactivated", "10s", "30s", "60s", "30 min", "60 min")
 
     // Load the saved values
@@ -49,90 +48,38 @@ fun SettingsView(onSave: () -> Unit) {
         }
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.TopCenter) // Align content at the top
-        ) {
+    Box(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        Column(modifier = Modifier.fillMaxWidth().align(Alignment.TopCenter)) {
             // Hometown input
             Text("Your hometown:", fontSize = 20.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(8.dp))
-            TextField(
-                value = hometown,
-                onValueChange = { hometown = it },
-                label = { Text("Hometown") },
-                textStyle = TextStyle(fontSize = 20.sp),  // Adjust font size here
-                modifier = Modifier.fillMaxWidth()
-            )
-
+            TextField(value = hometown, onValueChange = { hometown = it }, label = { Text("Hometown") }, textStyle = TextStyle(fontSize = 20.sp), modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(16.dp))
 
             // API token input
             Text("API Token:", fontSize = 20.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(8.dp))
-            TextField(
-                value = apiToken,
-                onValueChange = { apiToken = it },
-                label = { Text("API Token") },
-                textStyle = TextStyle(fontSize = 20.sp),  // Adjust font size here
-                modifier = Modifier.fillMaxWidth()
-            )
-
+            TextField(value = apiToken, onValueChange = { apiToken = it }, label = { Text("API Token") }, textStyle = TextStyle(fontSize = 20.sp), modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(16.dp))
 
             // Timer dropdown input
             Text("Push notification timer:", fontSize = 20.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Dropdown menu for timer options
             var expanded by remember { mutableStateOf(false) }
             Box(modifier = Modifier.fillMaxWidth()) {
-                TextField(
-                    value = selectedTimerOption,
-                    onValueChange = { selectedTimerOption = it },
-                    label = { Text("Timer Option") },
-                    textStyle = TextStyle(fontSize = 20.sp),
-                    modifier = Modifier.fillMaxWidth(),
-                    readOnly = true,
-                    trailingIcon = {
-                        IconButton(onClick = { expanded = !expanded }) {
-                            Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = null)
-                        }
+                TextField(value = selectedTimerOption, onValueChange = { selectedTimerOption = it }, label = { Text("Timer Option") }, textStyle = TextStyle(fontSize = 20.sp), modifier = Modifier.fillMaxWidth(), readOnly = true, trailingIcon = {
+                    IconButton(onClick = { expanded = !expanded }) {
+                        Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = null)
                     }
-                )
+                })
 
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
+                DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }, modifier = Modifier.fillMaxWidth()) {
                     timerOptions.forEach { option ->
-                        DropdownMenuItem(
-                            onClick = {
-                                selectedTimerOption = option
-                                expanded = false
-                            },
-                            text = { Text(option) },
-                            modifier = Modifier.padding(8.dp),
-                            leadingIcon = {
-                                if (option == "Deactivated") {
-                                    Icon(Icons.Default.ArrowDropDown, contentDescription = null)
-                                }
-                            },
-                            trailingIcon = {
-                                Icon(Icons.Default.ArrowDropDown, contentDescription = null)
-                            },
-                            enabled = true,
-                            colors = MenuDefaults.itemColors(
-                                disabledTextColor = Color.Gray
-                            ),
-                            contentPadding = PaddingValues(8.dp)
-                        )
+                        DropdownMenuItem(onClick = {
+                            selectedTimerOption = option
+                            expanded = false
+                        }, text = { Text(option) }, modifier = Modifier.padding(8.dp))
                     }
                 }
             }
@@ -143,23 +90,34 @@ fun SettingsView(onSave: () -> Unit) {
         Button(
             onClick = {
                 scope.launch {
+                    // Save the settings
                     context.dataStore.edit { preferences ->
                         preferences[Keys.API_TOKEN_KEY] = apiToken
                         preferences[Keys.HOMETOWN_KEY] = hometown
-                        preferences[Keys.TIMER_OPTION_KEY] = selectedTimerOption // Save the timer option
+                        preferences[Keys.TIMER_OPTION_KEY] = selectedTimerOption
                     }
+                    // Send a broadcast to update the timer in the service
+                    val intent = Intent("com.example.jetpackcompose.UPDATE_TIMER")
+                    intent.putExtra("timer_option", selectedTimerOption)
+                    context.sendBroadcast(intent)
+
+                    // Stop the service
+                    val stopServiceIntent = Intent(context, PopupService::class.java)
+                    context.stopService(stopServiceIntent)
+
+                    // Restart the service
+                    val startServiceIntent = Intent(context, PopupService::class.java)
+                    context.startService(startServiceIntent)
+
                     delay(500)
-                    onSave()
+                    onSave() // Notify that the save operation is complete
                 }
             },
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF1E88E5)
-            )
+            modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1E88E5))
         ) {
             Text("Save", color = Color.White)
         }
+
     }
 }

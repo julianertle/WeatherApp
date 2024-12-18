@@ -1,20 +1,18 @@
 package com.example.jetpackcompose.service
 
 import android.app.*
-import android.content.Intent
-import android.os.Handler
-import android.os.IBinder
-import android.os.Looper
+import android.content.*
+import android.os.*
 import android.Manifest
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import android.app.PendingIntent
-import android.os.Build
+import android.util.Log
+import androidx.core.content.ContextCompat
 import com.example.jetpackcompose.MainActivity
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import com.example.jetpackcompose.ui.dataStore
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
@@ -23,16 +21,17 @@ import kotlinx.coroutines.flow.map
 class PopupService : Service() {
 
     private val handler = Handler(Looper.getMainLooper())
-    private var delayMillis: Long = 10000L // Default to 10 seconds
+    private var delayMillis: Long = -1L // Start with "Deactivated"
     private var i = 0
     private val dataStore by lazy { applicationContext.dataStore }
 
-    // Runnable to send a notification periodically
-    private val showNotificationRunnable = object : Runnable {
-        override fun run() {
-            sendNotification("Hello World $i")
-            i++ // Increment the variable
-            handler.postDelayed(this, delayMillis)
+    // To hold the current setting, so we can check the status before sending notifications
+    private var isNotificationEnabled: Boolean = false
+
+    private val updateReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val newTimerOption = intent?.getStringExtra("timer_option") ?: "Deactivated"
+            updateTimerOption(newTimerOption)
         }
     }
 
@@ -41,51 +40,100 @@ class PopupService : Service() {
         createNotificationChannel()
         startForeground(1, getNotification("Popup Service Running"))
 
-        // Fetch the timer value from DataStore
+        // Register the receiver to handle timer updates
+        ContextCompat.registerReceiver(
+            this,
+            updateReceiver,
+            IntentFilter("com.example.jetpackcompose.UPDATE_TIMER"),
+            ContextCompat.RECEIVER_NOT_EXPORTED // Protect the receiver (not exported to other apps)
+        )
+
+        // Fetch the initial timer value from DataStore
         CoroutineScope(Dispatchers.IO).launch {
             val timerOption = fetchTimerOptionFromSettings()
             delayMillis = timerOptionToMillis(timerOption)
 
-            if (delayMillis == Long.MAX_VALUE) {
-                // Stop the service as no notifications should be shown
-                stopSelf()
-            } else {
-                // Start the periodic notifications with the retrieved interval
+            // Only post notification if delayMillis is valid (not -1L)
+            if (delayMillis != -1L) {
+                isNotificationEnabled = true
                 handler.post(showNotificationRunnable)
             }
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacks(showNotificationRunnable) // Remove any pending runnable
+        unregisterReceiver(updateReceiver) // Unregister the receiver
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (delayMillis != Long.MAX_VALUE) {
+        // Only start posting notifications if the timer is not deactivated
+        if (delayMillis != -1L) {
+            handler.removeCallbacks(showNotificationRunnable) // Remove any pending runs
             handler.post(showNotificationRunnable)
         }
         return START_STICKY
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        handler.removeCallbacks(showNotificationRunnable) // Stop showing notifications
-    }
-
     override fun onBind(intent: Intent?): IBinder? = null
 
-    private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                "popup_service_channel",
-                "Popup Service Channel",
-                NotificationManager.IMPORTANCE_HIGH
-            ).apply {
-                description = "Notifications from Popup Service"
-                enableLights(true)
-                enableVibration(true)
-                lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+    // This runnable checks whether notifications are enabled or disabled at each interval
+    private val showNotificationRunnable = object : Runnable {
+        override fun run() {
+            if (isNotificationEnabled) {
+                sendNotification("Hello World $i")
+                i++
             }
-
-            val manager = getSystemService(NotificationManager::class.java)
-            manager.createNotificationChannel(channel)
+            handler.postDelayed(this, delayMillis)
         }
+    }
+
+    private fun updateTimerOption(option: String) {
+        delayMillis = timerOptionToMillis(option)
+        isNotificationEnabled = delayMillis != -1L // Update the state based on the new setting
+        handler.removeCallbacks(showNotificationRunnable) // Stop current notifications
+
+        if (delayMillis == -1L) {  // Use -1L to signify deactivation
+            stopSelf() // Stop the service if deactivated
+        } else {
+            handler.postDelayed(showNotificationRunnable, delayMillis) // Restart the notifications with the new delay
+        }
+    }
+
+    private suspend fun fetchTimerOptionFromSettings(): String {
+        val key = stringPreferencesKey("timer_option_key")
+        val timerOption = dataStore.data.map { preferences ->
+            preferences[key] ?: "Deactivated"
+        }.first()
+
+        Log.d("PopupService", "Fetched timer option: $timerOption") // Log fetched option
+        return timerOption
+    }
+
+    private fun timerOptionToMillis(option: String): Long {
+        return when (option) {
+            "10s" -> 10_000L
+            "30s" -> 30_000L
+            "60s" -> 60_000L
+            "30 min" -> 30 * 60 * 1000L
+            "60 min" -> 60 * 60 * 1000L
+            else -> -1L // Use -1L to represent "Deactivated"
+        }
+    }
+
+    private fun sendNotification(message: String) {
+        if (ActivityCompat.checkSelfPermission(
+                this@PopupService,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+
+        val notificationManager = NotificationManagerCompat.from(this)
+        val notification = getNotification(message)
+        notificationManager.notify(1, notification)
     }
 
     private fun getNotification(contentText: String): Notification {
@@ -108,35 +156,21 @@ class PopupService : Service() {
             .build()
     }
 
-    private fun sendNotification(message: String) {
-        if (ActivityCompat.checkSelfPermission(
-                this@PopupService,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                "popup_service_channel",
+                "Popup Service Channel",
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "Notifications from Popup Service"
+                enableLights(true)
+                enableVibration(true)
+                lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+            }
 
-        val notificationManager = NotificationManagerCompat.from(this)
-        val notification = getNotification(message)
-        notificationManager.notify(1, notification)
-    }
-
-    private suspend fun fetchTimerOptionFromSettings(): String {
-        val key = stringPreferencesKey("timer_option_key")
-        return dataStore.data.map { preferences ->
-            preferences[key] ?: "Deactivated"
-        }.first()
-    }
-
-    private fun timerOptionToMillis(option: String): Long {
-        return when (option) {
-            "10s" -> 10_000L
-            "30s" -> 30_000L
-            "60s" -> 60_000L
-            "30 min" -> 30 * 60 * 1000L
-            "60 min" -> 60 * 60 * 1000L
-            else -> Long.MAX_VALUE // "Deactivated" means no notifications
+            val manager = getSystemService(NotificationManager::class.java)
+            manager.createNotificationChannel(channel)
         }
     }
 }
