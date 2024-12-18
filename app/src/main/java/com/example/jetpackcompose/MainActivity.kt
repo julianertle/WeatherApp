@@ -1,45 +1,30 @@
 package com.example.jetpackcompose
 
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.compose.setContent
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.jetpackcompose.viewmodel.WeatherViewModel
-import com.example.jetpackcompose.service.PopupService
 import com.example.jetpackcompose.ui.WeatherApp
+import com.example.jetpackcompose.viewmodel.PopupServiceManager
 
 class MainActivity : ComponentActivity() {
-    private val requestPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            if (isGranted) startPopupService()
-            else Toast.makeText(this, "Permission denied, notifications won't work", Toast.LENGTH_LONG).show()
-        }
+
+    private val popupServiceManager = PopupServiceManager(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+            popupServiceManager.requestPermission()
         } else {
-            startPopupService()
+            popupServiceManager.startPopupService()
         }
 
         setContent {
-            val viewModel: WeatherViewModel = viewModel() // Directly use the ViewModel without the factory
+            val viewModel: WeatherViewModel = viewModel()
             WeatherApp(viewModel)
-        }
-    }
-
-    private fun startPopupService() {
-        val serviceIntent = Intent(applicationContext, PopupService::class.java)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(serviceIntent)
-        } else {
-            startService(serviceIntent)
         }
     }
 }

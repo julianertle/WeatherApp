@@ -106,10 +106,19 @@ fun SettingsView(onSave: () -> Unit) {
                     onSave()
                 }
             },
-            modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp)
+                .widthIn(200.dp)
+                .align(Alignment.BottomCenter),
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1E88E5))
         ) {
-            Text("Save", color = Color.White)
+            Text(
+                "Save",
+                color = Color.White,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }
