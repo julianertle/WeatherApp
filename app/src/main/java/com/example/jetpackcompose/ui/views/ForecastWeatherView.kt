@@ -104,14 +104,13 @@ fun ForecastWeatherView(forecast: List<ForecastItem>) {
                     .align(Alignment.CenterHorizontally)
             )
 
-            // Display forecast data
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                items(forecast.size) { index ->
-                    WeatherCard(forecastItem = forecast[index])
-                }
-            }
+
+            ////////////////////////////////////
+
+            //TODO Zeige die Wettervorhersage in einer Liste an (optional aber empfohlen: nutze die WeatherCard Komponente)
+
+            ////////////////////////////////////
+
         }
     }
 }
