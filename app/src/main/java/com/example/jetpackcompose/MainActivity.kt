@@ -8,9 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.compose.setContent
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.jetpackcompose.data.WeatherRepositoryImpl
 import com.example.jetpackcompose.viewmodel.WeatherViewModel
-import com.example.jetpackcompose.viewmodel.WeatherViewModelFactory
 import com.example.jetpackcompose.service.PopupService
 import com.example.jetpackcompose.ui.WeatherApp
 
@@ -31,7 +29,7 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            val viewModel: WeatherViewModel = viewModel(factory = WeatherViewModelFactory(WeatherRepositoryImpl()))
+            val viewModel: WeatherViewModel = viewModel() // Directly use the ViewModel without the factory
             WeatherApp(viewModel)
         }
     }
