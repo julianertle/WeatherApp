@@ -51,7 +51,7 @@ fun ForecastWeatherView(forecast: List<ForecastItem>) {
             onQueryChanged = { query ->
                 searchQuery.value = query
                 if (query.isNotEmpty()) {
-                    weatherViewModel.fetchWeatherData(query, apiKey)
+                    weatherViewModel.fetchForecastData(query, apiKey)
                 } else {
                     if (hometown.isNotEmpty() && apiKey.isNotEmpty()) {
                         weatherViewModel.fetchForecastData(hometown, apiKey)
@@ -83,7 +83,7 @@ fun ForecastWeatherView(forecast: List<ForecastItem>) {
     ) {
         Spacer(modifier = Modifier.height(24.dp))
 
-        if (hometown.isEmpty()) {
+        if (searchQuery.value.isEmpty() && hometown.isEmpty()) {
             Text(
                 text = "Set your hometown in settings",
                 style = MaterialTheme.typography.bodyLarge.copy(
@@ -95,7 +95,7 @@ fun ForecastWeatherView(forecast: List<ForecastItem>) {
         } else if (forecast.isNotEmpty()) {
             // Show "Forecast for [hometown]" if forecast data is available
             Text(
-                text = "Forecast for $hometown",
+                text = "Forecast for ${searchQuery.value.takeIf { it.isNotEmpty() } ?: hometown}",
                 style = MaterialTheme.typography.headlineLarge.copy(
                     fontSize = 28.sp,
                     color = Color.Black
