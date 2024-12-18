@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.example.jetpackcompose.data.ForecastItem
-import com.example.jetpackcompose.ui.convertUnixToTime
+import com.example.jetpackcompose.ui.views.convertUnixToTime
 
 @Composable
 fun WeatherCard(forecastItem: ForecastItem) {

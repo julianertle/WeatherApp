@@ -1,4 +1,4 @@
-package com.example.jetpackcompose.ui
+package com.example.jetpackcompose.ui.views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,7 +22,6 @@ import java.util.Date
 import java.util.Locale
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.jetpackcompose.ui.components.SearchBarSample
-import com.example.jetpackcompose.ui.views.dataStore
 
 @Composable
 fun CurrentWeatherView(currentWeather: WeatherData?, iconUrl: String?) {

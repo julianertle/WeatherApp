@@ -9,6 +9,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
 import com.example.jetpackcompose.viewmodel.WeatherViewModel
 import com.example.jetpackcompose.ui.components.BottomNavBar
+import com.example.jetpackcompose.ui.views.CurrentWeatherView
+import com.example.jetpackcompose.ui.views.ForecastWeatherView
 import com.example.jetpackcompose.ui.views.SettingsView
 
 @Composable
