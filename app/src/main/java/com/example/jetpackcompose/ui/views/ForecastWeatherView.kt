@@ -93,7 +93,6 @@ fun ForecastWeatherView(forecast: List<ForecastItem>) {
                 modifier = Modifier.padding(16.dp)
             )
         } else if (forecast.isNotEmpty()) {
-            // Show "Forecast for [hometown]" if forecast data is available
             Text(
                 text = "Forecast for ${searchQuery.value.takeIf { it.isNotEmpty() } ?: hometown}",
                 style = MaterialTheme.typography.headlineLarge.copy(
