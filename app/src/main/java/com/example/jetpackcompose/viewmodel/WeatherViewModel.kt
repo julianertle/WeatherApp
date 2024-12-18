@@ -40,7 +40,10 @@ class WeatherViewModel : ViewModel() {
         }
     }
 
-    // TODO: Implementiere die fetchForecastData-Methode. Diese soll die Vorhersagedaten für die angegebene Stadt und den API-Schlüssel abrufen und die entsprechenden Variablen (_forecast, _errorMessage) setzen.
+    fun fetchForecastData(city: String, apiKey: String) {
+        //Todo
+    }
+
 
     private fun fetchWeatherIcon(iconId: String) {
         if (iconId.isNotEmpty()) {
