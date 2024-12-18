@@ -37,7 +37,7 @@ object WeatherApiService {
 
     suspend fun fetchWeather(city: String, apiKey: String): WeatherData? {
         return try {
-            withContext(Dispatchers.IO) {
+            withContext(Dispatchers.Default) {
                 val response = api.fetchWeather(city, apiKey)
                 if (response.isSuccessful) {
                     response.body()
@@ -52,5 +52,10 @@ object WeatherApiService {
         }
     }
 
+
+    ////////////////////////////////////
+
     // TODO: Methode fetchForecast implementieren, um die Wettervorhersage abzurufen.
+
+    ////////////////////////////////////
 }
