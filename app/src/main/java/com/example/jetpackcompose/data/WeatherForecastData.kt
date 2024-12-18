@@ -1,5 +1,4 @@
 package com.example.jetpackcompose.data
-typealias WeatherForecastData = ForecastResponse
 
 data class ForecastResponse(
     val cod: String,
@@ -18,7 +17,7 @@ data class ForecastItem(
     val pop: Double,
     val sys: ForecastSys,
     val dt_txt: String,
-    val rain: Rain? = null // Rain may not always be present
+    val rain: Rain? = null
 )
 
 data class ForecastSys(val pod: String)

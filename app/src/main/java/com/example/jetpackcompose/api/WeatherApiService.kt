@@ -13,14 +13,13 @@ import retrofit2.http.Query
 
 object WeatherApiService {
     private const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
-    private const val API_KEY = "31c02750cfcd532431987a20153cde7c"
 
     private val client = OkHttpClient.Builder().build()
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .client(client)
-        .addConverterFactory(GsonConverterFactory.create()) // Add Gson converter for JSON parsing
+        .addConverterFactory(GsonConverterFactory.create())
         .build()
 
     private val api = retrofit.create(WeatherApi::class.java)
@@ -30,7 +29,7 @@ object WeatherApiService {
         suspend fun fetchWeather(
             @Query("q") city: String,
             @Query("appid") apiKey: String,
-            @Query("units") units: String = "metric" // Add the units parameter with a default value
+            @Query("units") units: String = "metric"
         ): retrofit2.Response<WeatherData>
 
         @GET("forecast")
@@ -41,39 +40,30 @@ object WeatherApiService {
         ): retrofit2.Response<ForecastResponse>
     }
 
-    suspend fun fetchWeather(city: String, apiKey: String): WeatherData? {
+    private suspend fun <T> fetchApiData(
+        fetchFunction: suspend () -> retrofit2.Response<T>
+    ): T? {
         return try {
             withContext(Dispatchers.IO) {
-                val response = api.fetchWeather(city,apiKey)
-
+                val response = fetchFunction()
                 if (response.isSuccessful) {
-                    response.body() // Automatically parsed into WeatherData
+                    response.body()
                 } else {
-
-                    Log.e("WeatherApiService", "Failed to fetch weather for $city: ${response.code()}")
+                    Log.e("WeatherApiService", "Failed to fetch data: ${response.code()}")
                     null
                 }
             }
         } catch (e: Exception) {
-            Log.e("WeatherApiService", "Error fetching weather data for $city: ${e.message}")
+            Log.e("WeatherApiService", "Error fetching data: ${e.message}")
             null
         }
     }
 
+    suspend fun fetchWeather(city: String, apiKey: String): WeatherData? {
+        return fetchApiData { api.fetchWeather(city, apiKey) }
+    }
+
     suspend fun fetchForecast(city: String, apiKey: String): ForecastResponse? {
-        return try {
-            withContext(Dispatchers.IO) {
-                val response = api.fetchForecast(city,apiKey)
-                if (response.isSuccessful) {
-                    response.body()
-                } else {
-                    Log.e("WeatherApiService", "Failed to fetch forecast for $city: ${response.code()}")
-                    null
-                }
-            }
-        } catch (e: Exception) {
-            Log.e("WeatherApiService", "Error fetching forecast data for $city: ${e.message}")
-            null
-        }
+        return fetchApiData { api.fetchForecast(city, apiKey) }
     }
 }
