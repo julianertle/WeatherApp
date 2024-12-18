@@ -25,31 +25,23 @@ import java.util.Date
 import java.util.Locale
 import androidx.lifecycle.viewmodel.compose.viewModel
 
-
 @Composable
 fun CurrentWeatherView(currentWeather: WeatherData?, iconUrl: String?) {
 
-    val weatherViewModel: WeatherViewModel = viewModel() // This creates the view model instance
-
+    val weatherViewModel: WeatherViewModel = viewModel()
     val currentWeather by weatherViewModel.currentWeather.collectAsState()
     val iconUrl by weatherViewModel.iconUrl.collectAsState()
 
     var hometown by remember { mutableStateOf("") }
     var apiKey by remember { mutableStateOf("") }
-
     val errorMessage by weatherViewModel.errorMessage.collectAsState()
 
     val context = LocalContext.current
 
-    // Retrieve hometown and apiKey from DataStore when the view is opened
     LaunchedEffect(Unit) {
-        // Collect both hometown and apiKey
         context.dataStore.data.collect { preferences ->
-            // Retrieve values from DataStore
             hometown = preferences[Keys.HOMETOWN_KEY] ?: ""
-            apiKey = preferences[Keys.API_TOKEN_KEY] ?: ""  // Ensure you have a key in the DataStore for API_KEY
-
-            // Automatically fetch weather for hometown if it exists
+            apiKey = preferences[Keys.API_TOKEN_KEY] ?: ""
             if (hometown.isNotEmpty()) {
                 weatherViewModel.fetchWeatherData(hometown, apiKey)
             }
@@ -63,14 +55,13 @@ fun CurrentWeatherView(currentWeather: WeatherData?, iconUrl: String?) {
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
     ) {
-        // Pass hometown as the initial query to the search bar
         SearchBarSample(
             selectedMenu = "Home",
             apiKey = apiKey,
             onQueryChanged = { query ->
-                searchQuery.value = query // Update the search query when the input changes
+                searchQuery.value = query
                 if (query.isNotEmpty()) {
-                    weatherViewModel.fetchWeatherData(query,apiKey)
+                    weatherViewModel.fetchWeatherData(query, apiKey)
                 }
             }
         )
@@ -80,19 +71,16 @@ fun CurrentWeatherView(currentWeather: WeatherData?, iconUrl: String?) {
         Text(
             text = it,
             color = Color.Red,
-            style = MaterialTheme.typography.bodyMedium.copy(fontSize = 25.sp), // Increase font size
+            style = MaterialTheme.typography.bodyMedium.copy(fontSize = 25.sp),
             modifier = Modifier
-                .padding(32.dp) // Add more padding for visibility
-                .fillMaxWidth() // Optionally, make the text take full width
-                .wrapContentWidth(Alignment.CenterHorizontally) // Center align text horizontally
+                .padding(32.dp)
+                .fillMaxWidth()
+                .wrapContentWidth(Alignment.CenterHorizontally)
         )
     }
 
-
-    // If a search query exists or weather data is loaded, show the weather data
     if (searchQuery.value.isNotEmpty() || hometown.isNotEmpty()) {
         currentWeather?.let {
-            // Display current weather details
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -125,7 +113,6 @@ fun CurrentWeatherView(currentWeather: WeatherData?, iconUrl: String?) {
                     }
                 }
 
-                // Function to create rows for labels and values
                 @Composable
                 fun createWeatherInfoRow(label: String, value: String) {
                     Row(
@@ -164,7 +151,6 @@ fun CurrentWeatherView(currentWeather: WeatherData?, iconUrl: String?) {
                     }
                 }
 
-                // Display weather details
                 createWeatherInfoRow("Description:", it.weather[0].description)
                 Spacer(modifier = Modifier.height(8.dp))
                 createWeatherInfoRow("Temp.:", "${it.main.temp}°C")
@@ -190,9 +176,8 @@ fun CurrentWeatherView(currentWeather: WeatherData?, iconUrl: String?) {
             modifier = Modifier.padding(16.dp)
         )
     } else {
-        Spacer(modifier = Modifier.height(24.dp)) // Add space between the search bar and the forecast header
+        Spacer(modifier = Modifier.height(24.dp))
 
-        // Show this message only when no search query and no hometown are set
         Text(
             text = "Set your hometown in settings",
             style = MaterialTheme.typography.bodyLarge.copy(fontSize = 24.sp),
@@ -200,7 +185,6 @@ fun CurrentWeatherView(currentWeather: WeatherData?, iconUrl: String?) {
             modifier = Modifier.padding(16.dp)
         )
     }
-
 }
 
 fun convertUnixToTime(timestamp: Long): String {

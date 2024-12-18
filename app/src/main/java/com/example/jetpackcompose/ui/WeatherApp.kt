@@ -25,7 +25,7 @@ fun WeatherApp(viewModel: WeatherViewModel) {
         Column(modifier = Modifier.fillMaxSize()) {
             Box(
                 modifier = Modifier
-                    .weight(1f) // Takes remaining space above
+                    .weight(1f)
                     .fillMaxWidth()
                     .background(upperHalfColor)
             )
@@ -37,7 +37,6 @@ fun WeatherApp(viewModel: WeatherViewModel) {
             )
         }
 
-        // Main content area
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -47,24 +46,15 @@ fun WeatherApp(viewModel: WeatherViewModel) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(bottom = 56.dp), // Add enough padding to prevent overlap with bottom nav bar
+                    .padding(bottom = 56.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(modifier = Modifier.height(16.dp))
 
-                if (selectedItem == 0) {
-                    CurrentWeatherView(
-                        currentWeather = currentWeather,
-                        iconUrl = iconUrl
-                    )
-                }
-
-                if (selectedItem == 1) {
-                    ForecastWeatherView(forecast = forecast) // Pass the viewModel here
-                }
-
-                if (selectedItem == 2) {
-                    SettingsView(onSave = { selectedItem = 0 }) // Navigate back to Home (0 index)
+                when (selectedItem) {
+                    0 -> CurrentWeatherView(currentWeather = currentWeather, iconUrl = iconUrl)
+                    1 -> ForecastWeatherView(forecast = forecast)
+                    2 -> SettingsView(onSave = { selectedItem = 0 })
                 }
             }
 

@@ -34,7 +34,6 @@ fun SettingsView(onSave: () -> Unit) {
     var selectedTimerOption by remember { mutableStateOf("Deactivated") }
     val timerOptions = listOf("Deactivated", "10s", "30s", "60s", "30 min", "60 min")
 
-    // Load the saved values
     LaunchedEffect(Unit) {
         context.dataStore.data.map { preferences ->
             val apiToken = preferences[Keys.API_TOKEN_KEY] ?: ""
@@ -50,19 +49,16 @@ fun SettingsView(onSave: () -> Unit) {
 
     Box(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Column(modifier = Modifier.fillMaxWidth().align(Alignment.TopCenter)) {
-            // Hometown input
             Text("Your hometown:", fontSize = 20.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(8.dp))
             TextField(value = hometown, onValueChange = { hometown = it }, label = { Text("Hometown") }, textStyle = TextStyle(fontSize = 20.sp), modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(16.dp))
 
-            // API token input
             Text("API Token:", fontSize = 20.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(8.dp))
             TextField(value = apiToken, onValueChange = { apiToken = it }, label = { Text("API Token") }, textStyle = TextStyle(fontSize = 20.sp), modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Timer dropdown input
             Text("Push notification timer:", fontSize = 20.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -90,27 +86,24 @@ fun SettingsView(onSave: () -> Unit) {
         Button(
             onClick = {
                 scope.launch {
-                    // Save the settings
                     context.dataStore.edit { preferences ->
                         preferences[Keys.API_TOKEN_KEY] = apiToken
                         preferences[Keys.HOMETOWN_KEY] = hometown
                         preferences[Keys.TIMER_OPTION_KEY] = selectedTimerOption
                     }
-                    // Send a broadcast to update the timer in the service
+
                     val intent = Intent("com.example.jetpackcompose.UPDATE_TIMER")
                     intent.putExtra("timer_option", selectedTimerOption)
                     context.sendBroadcast(intent)
 
-                    // Stop the service
                     val stopServiceIntent = Intent(context, PopupService::class.java)
                     context.stopService(stopServiceIntent)
 
-                    // Restart the service
                     val startServiceIntent = Intent(context, PopupService::class.java)
                     context.startService(startServiceIntent)
 
                     delay(500)
-                    onSave() // Notify that the save operation is complete
+                    onSave()
                 }
             },
             modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter),
@@ -118,6 +111,5 @@ fun SettingsView(onSave: () -> Unit) {
         ) {
             Text("Save", color = Color.White)
         }
-
     }
 }

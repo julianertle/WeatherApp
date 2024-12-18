@@ -3,14 +3,12 @@ package com.example.jetpackcompose.ui
 import SearchBarSample
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import com.example.jetpackcompose.data.ForecastItem
 import com.example.jetpackcompose.ui.components.WeatherCard
 import com.example.jetpackcompose.data.Keys
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.jetpackcompose.model.WeatherViewModel
-import kotlinx.coroutines.flow.map
 
 @Composable
 fun ForecastWeatherView(forecast: List<ForecastItem>) {
@@ -29,22 +26,13 @@ fun ForecastWeatherView(forecast: List<ForecastItem>) {
     val weatherViewModel: WeatherViewModel = viewModel()
     val errorMessage by weatherViewModel.errorMessage.collectAsState()
 
-    // Retrieve hometown from DataStore
-    LaunchedEffect(Unit) {
-        context.dataStore.data.map { preferences ->
-            preferences[Keys.HOMETOWN_KEY] ?: ""
-        }.collect { savedHometown ->
-            hometown = savedHometown
-        }
-    }
-
-    // Retrieve hometown and apiKey from DataStore when the view is opened
+    // Retrieve hometown and apiKey from DataStore
     LaunchedEffect(Unit) {
         context.dataStore.data.collect { preferences ->
             hometown = preferences[Keys.HOMETOWN_KEY] ?: ""
             apiKey = preferences[Keys.API_TOKEN_KEY] ?: ""
 
-            if (hometown.isNotEmpty()) {
+            if (hometown.isNotEmpty() && apiKey.isNotEmpty()) {
                 weatherViewModel.fetchForecastData(hometown, apiKey)
             }
         }
@@ -64,6 +52,10 @@ fun ForecastWeatherView(forecast: List<ForecastItem>) {
                 searchQuery.value = query
                 if (query.isNotEmpty()) {
                     weatherViewModel.fetchWeatherData(query, apiKey)
+                } else {
+                    if (hometown.isNotEmpty() && apiKey.isNotEmpty()) {
+                        weatherViewModel.fetchForecastData(hometown, apiKey)
+                    }
                 }
             }
         )
@@ -74,7 +66,7 @@ fun ForecastWeatherView(forecast: List<ForecastItem>) {
         Text(
             text = it,
             color = Color.Red,
-            style = MaterialTheme.typography.body1.copy(fontSize = 25.sp),
+            style = MaterialTheme.typography.bodyLarge.copy(fontSize = 25.sp),
             modifier = Modifier
                 .padding(32.dp)
                 .fillMaxWidth()
@@ -94,7 +86,7 @@ fun ForecastWeatherView(forecast: List<ForecastItem>) {
         if (hometown.isEmpty()) {
             Text(
                 text = "Set your hometown in settings",
-                style = MaterialTheme.typography.body1.copy(
+                style = MaterialTheme.typography.bodyLarge.copy(
                     fontSize = 24.sp,
                     color = Color.Gray
                 ),
@@ -104,7 +96,7 @@ fun ForecastWeatherView(forecast: List<ForecastItem>) {
             // Show "Forecast for [hometown]" if forecast data is available
             Text(
                 text = "Forecast for $hometown",
-                style = MaterialTheme.typography.h4.copy(
+                style = MaterialTheme.typography.headlineLarge.copy(
                     fontSize = 28.sp,
                     color = Color.Black
                 ),
