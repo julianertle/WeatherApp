@@ -1,6 +1,7 @@
 package com.example.jetpackcompose.ui.views
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -15,6 +16,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.jetpackcompose.viewmodel.WeatherViewModel
 import com.example.jetpackcompose.ui.components.SearchBarSample
+import com.example.jetpackcompose.ui.components.WeatherCard
 
 @Composable
 fun ForecastWeatherView(forecast: List<ForecastItem>) {
@@ -101,12 +103,17 @@ fun ForecastWeatherView(forecast: List<ForecastItem>) {
                     .align(Alignment.CenterHorizontally)
             )
 
-            ////////////////////////////////////
+            // Display forecast data
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                ////////////////////////////////////
 
-            //TODO Zeige die Wettervorhersage in einer Liste an (optional aber empfohlen: nutze die WeatherCard Komponente)
-            // Der Text unten darf entfernt werden.
+                //TODO Zeige die Wettervorhersage in dieser Liste an (optional aber empfohlen: nutze die WeatherCard Komponente)
+                // Der Text unten darf entfernt werden.
 
-            ////////////////////////////////////
+                ////////////////////////////////////
+            }
 
         }
 
