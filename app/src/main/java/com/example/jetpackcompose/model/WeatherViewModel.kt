@@ -26,18 +26,14 @@ class WeatherViewModel : ViewModel() {
     fun fetchWeatherData(city: String, apiKey: String) {
         viewModelScope.launch {
             try {
-                val weatherData = WeatherApiService.fetchWeather(city, apiKey)
-                if (weatherData != null) {
+                WeatherApiService.fetchWeather(city, apiKey)?.let { weatherData ->
                     _currentWeather.value = weatherData
-                    val iconId = weatherData.weather.firstOrNull()?.icon ?: ""
-                    fetchWeatherIcon(iconId)
-                    _errorMessage.value = null // Clear any previous errors
-                } else {
-                    // If weather data is null, set an error message
+                    fetchWeatherIcon(weatherData.weather.firstOrNull()?.icon.orEmpty())
+                    _errorMessage.value = null
+                } ?: run {
                     _errorMessage.value = "Failed to fetch weather. Please check your API key or city name."
                 }
             } catch (e: Exception) {
-                // If there is an error (e.g., invalid API key), show the error message
                 _errorMessage.value = "An error occurred: ${e.localizedMessage}"
             }
         }
@@ -45,19 +41,17 @@ class WeatherViewModel : ViewModel() {
 
     private fun fetchWeatherIcon(iconId: String) {
         if (iconId.isNotEmpty()) {
-            val iconUrl = "https://openweathermap.org/img/wn/$iconId@2x.png"
-            _iconUrl.value = iconUrl
+            _iconUrl.value = "https://openweathermap.org/img/wn/$iconId@2x.png"
         }
     }
 
     fun fetchForecastData(city: String, apiKey: String) {
         viewModelScope.launch {
             try {
-                val forecastResponse = WeatherApiService.fetchForecast(city, apiKey)
-                if (forecastResponse != null) {
+                WeatherApiService.fetchForecast(city, apiKey)?.let { forecastResponse ->
                     _forecast.value = forecastResponse.list
-                    _errorMessage.value = null // Clear any previous errors
-                } else {
+                    _errorMessage.value = null
+                } ?: run {
                     _errorMessage.value = "Failed to fetch forecast. Please check your API key or city name."
                 }
             } catch (e: Exception) {

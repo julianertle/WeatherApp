@@ -23,37 +23,35 @@ fun WeatherCard(forecastItem: ForecastItem) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp) // Increased padding for bigger cards
-            .padding(horizontal = 16.dp) // Optional: added horizontal padding to the entire card
-            .background(color = Color(0xFFBBDEFB), shape = RoundedCornerShape(16.dp)) // Set rounded corners with background
-            .padding(16.dp) // Padding inside the card
-            .clip(RoundedCornerShape(16.dp)), // Ensure clipping is applied after the background
+            .padding(vertical = 8.dp)
+            .padding(horizontal = 16.dp)
+            .background(color = Color(0xFFBBDEFB), shape = RoundedCornerShape(16.dp))
+            .padding(16.dp)
+            .clip(RoundedCornerShape(16.dp)),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Weather icon - increased size
         Image(
             painter = rememberAsyncImagePainter("https://openweathermap.org/img/wn/${forecastItem.weather.firstOrNull()?.icon}@2x.png"),
             contentDescription = null,
-            modifier = Modifier.size(100.dp), // Increased size of the icon
+            modifier = Modifier.size(100.dp),
             contentScale = ContentScale.Crop
         )
 
-        Spacer(modifier = Modifier.width(24.dp)) // Increased spacing between icon and text
+        Spacer(modifier = Modifier.width(24.dp))
 
-        // Weather data details - increased font size
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.Start
         ) {
             Text(
                 text = convertUnixToTime(forecastItem.dt),
-                style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp), // Increased font size
-                modifier = Modifier.padding(bottom = 4.dp) // Added spacing between lines
+                style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp),
+                modifier = Modifier.padding(bottom = 4.dp)
             )
             Text(
                 text = "${forecastItem.main.temp}°C - ${forecastItem.weather.firstOrNull()?.description ?: "N/A"}",
                 color = Color.Gray,
-                style = MaterialTheme.typography.bodyMedium.copy(fontSize = 18.sp) // Increased font size
+                style = MaterialTheme.typography.bodyMedium.copy(fontSize = 18.sp)
             )
         }
     }

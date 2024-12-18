@@ -62,7 +62,7 @@ fun WeatherApp(viewModel: WeatherViewModel) {
                 selectedItem = selectedItem,
                 onItemSelected = { selectedItem = it },
                 modifier = Modifier.align(Alignment.BottomCenter),
-                color = lowerHalfColor
+                backgroundColor = lowerHalfColor
             )
         }
     }

@@ -1,6 +1,5 @@
 package com.example.jetpackcompose.ui
 
-import SearchBarSample
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
@@ -17,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.jetpackcompose.model.WeatherViewModel
+import com.example.jetpackcompose.ui.components.SearchBarSample
 
 @Composable
 fun ForecastWeatherView(forecast: List<ForecastItem>) {

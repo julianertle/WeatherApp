@@ -1,3 +1,5 @@
+package com.example.jetpackcompose.ui.components
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,9 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-
-// Imports for TextField and SearchBar specific components
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -29,7 +28,7 @@ import com.example.jetpackcompose.model.WeatherViewModel
 fun SearchBarSample(
     weatherViewModel: WeatherViewModel = viewModel(),
     selectedMenu: String = "",
-    apiKey: String,  // Add apiKey as a parameter
+    apiKey: String,
     onQueryChanged: (String) -> Unit
 ) {
     val textFieldState = rememberTextFieldState()
@@ -37,10 +36,8 @@ fun SearchBarSample(
     val focusManager = LocalFocusManager.current
     var cityName by rememberSaveable { mutableStateOf("") }
 
-    // A list to store recent searches
     var recentSearches by rememberSaveable { mutableStateOf(listOf<String>()) }
 
-    // Collect the current weather data
     val currentWeather by weatherViewModel.currentWeather.collectAsState()
 
     Box(
@@ -54,7 +51,6 @@ fun SearchBarSample(
                 .fillMaxWidth()
                 .align(Alignment.TopCenter)
         ) {
-            // Search Bar
             SearchBar(
                 modifier = Modifier.fillMaxWidth(),
                 inputField = {
@@ -62,20 +58,16 @@ fun SearchBarSample(
                         state = textFieldState,
                         onSearch = { inputQuery ->
                             cityName = inputQuery
-                            onQueryChanged(cityName)  // Pass the query back to the parent composable
-                            println("Search input: $inputQuery")
+                            onQueryChanged(cityName)
 
-                            // Perform actions based on selectedMenu
                             if (inputQuery.isNotEmpty()) {
                                 when (selectedMenu) {
                                     "Home" -> weatherViewModel.fetchWeatherData(inputQuery, apiKey)
                                     "Forecast" -> weatherViewModel.fetchForecastData(inputQuery, apiKey)
                                 }
-                                // Update recent searches
                                 recentSearches = (listOf(inputQuery) + recentSearches).distinct().take(5)
                             }
 
-                            // Clear the text field and close the keyboard
                             focusManager.clearFocus()
                             textFieldState.clearText()
                             expanded = false
@@ -94,7 +86,6 @@ fun SearchBarSample(
                     expanded = it && recentSearches.isNotEmpty()
                 },
             ) {
-                // Display recent searches if expanded
                 if (recentSearches.isNotEmpty() && expanded) {
                     LazyColumn(
                         modifier = Modifier
@@ -110,12 +101,9 @@ fun SearchBarSample(
                                 colors = ListItemDefaults.colors(containerColor = Color.Transparent),
                                 modifier = Modifier
                                     .clickable {
-                                        // Set the text and cursor, fetch weather, and close the suggestions
                                         textFieldState.setTextAndPlaceCursorAtEnd(resultText)
                                         expanded = false
                                         weatherViewModel.fetchWeatherData(resultText, apiKey)
-
-                                        // Update recent searches
                                         recentSearches = (listOf(resultText) + recentSearches).distinct().take(5)
                                         focusManager.clearFocus()
                                     }

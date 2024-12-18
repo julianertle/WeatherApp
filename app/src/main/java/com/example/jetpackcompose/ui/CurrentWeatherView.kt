@@ -1,6 +1,5 @@
 package com.example.jetpackcompose.ui
 
-import SearchBarSample
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -24,6 +23,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.jetpackcompose.ui.components.SearchBarSample
 
 @Composable
 fun CurrentWeatherView(currentWeather: WeatherData?, iconUrl: String?) {

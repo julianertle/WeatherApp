@@ -21,11 +21,9 @@ import kotlinx.coroutines.flow.map
 class PopupService : Service() {
 
     private val handler = Handler(Looper.getMainLooper())
-    private var delayMillis: Long = -1L // Start with "Deactivated"
+    private var delayMillis: Long = -1L
     private var i = 0
     private val dataStore by lazy { applicationContext.dataStore }
-
-    // To hold the current setting, so we can check the status before sending notifications
     private var isNotificationEnabled: Boolean = false
 
     private val updateReceiver = object : BroadcastReceiver() {
@@ -40,20 +38,17 @@ class PopupService : Service() {
         createNotificationChannel()
         startForeground(1, getNotification("Popup Service Running"))
 
-        // Register the receiver to handle timer updates
         ContextCompat.registerReceiver(
             this,
             updateReceiver,
             IntentFilter("com.example.jetpackcompose.UPDATE_TIMER"),
-            ContextCompat.RECEIVER_NOT_EXPORTED // Protect the receiver (not exported to other apps)
+            ContextCompat.RECEIVER_NOT_EXPORTED
         )
 
-        // Fetch the initial timer value from DataStore
         CoroutineScope(Dispatchers.IO).launch {
             val timerOption = fetchTimerOptionFromSettings()
             delayMillis = timerOptionToMillis(timerOption)
 
-            // Only post notification if delayMillis is valid (not -1L)
             if (delayMillis != -1L) {
                 isNotificationEnabled = true
                 handler.post(showNotificationRunnable)
@@ -63,14 +58,13 @@ class PopupService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        handler.removeCallbacks(showNotificationRunnable) // Remove any pending runnable
-        unregisterReceiver(updateReceiver) // Unregister the receiver
+        handler.removeCallbacks(showNotificationRunnable)
+        unregisterReceiver(updateReceiver)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Only start posting notifications if the timer is not deactivated
         if (delayMillis != -1L) {
-            handler.removeCallbacks(showNotificationRunnable) // Remove any pending runs
+            handler.removeCallbacks(showNotificationRunnable)
             handler.post(showNotificationRunnable)
         }
         return START_STICKY
@@ -78,7 +72,6 @@ class PopupService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? = null
 
-    // This runnable checks whether notifications are enabled or disabled at each interval
     private val showNotificationRunnable = object : Runnable {
         override fun run() {
             if (isNotificationEnabled) {
@@ -91,13 +84,13 @@ class PopupService : Service() {
 
     private fun updateTimerOption(option: String) {
         delayMillis = timerOptionToMillis(option)
-        isNotificationEnabled = delayMillis != -1L // Update the state based on the new setting
-        handler.removeCallbacks(showNotificationRunnable) // Stop current notifications
+        isNotificationEnabled = delayMillis != -1L
+        handler.removeCallbacks(showNotificationRunnable)
 
-        if (delayMillis == -1L) {  // Use -1L to signify deactivation
-            stopSelf() // Stop the service if deactivated
+        if (delayMillis == -1L) {
+            stopSelf()
         } else {
-            handler.postDelayed(showNotificationRunnable, delayMillis) // Restart the notifications with the new delay
+            handler.postDelayed(showNotificationRunnable, delayMillis)
         }
     }
 
@@ -107,7 +100,6 @@ class PopupService : Service() {
             preferences[key] ?: "Deactivated"
         }.first()
 
-        Log.d("PopupService", "Fetched timer option: $timerOption") // Log fetched option
         return timerOption
     }
 
@@ -118,7 +110,7 @@ class PopupService : Service() {
             "60s" -> 60_000L
             "30 min" -> 30 * 60 * 1000L
             "60 min" -> 60 * 60 * 1000L
-            else -> -1L // Use -1L to represent "Deactivated"
+            else -> -1L
         }
     }
 
