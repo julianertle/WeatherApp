@@ -109,7 +109,7 @@ fun ForecastWeatherView(forecast: List<ForecastItem>) {
             ) {
                 ////////////////////////////////////
 
-                //TODO Zeige die Wettervorhersage in dieser Liste an (optional aber empfohlen: nutze die WeatherCard Komponente)
+                //TODO Zeige die Wettervorhersage in dieser Liste an (nutze die WeatherCard Komponente)
                 // Der Text unten darf entfernt werden.
 
                 ////////////////////////////////////
