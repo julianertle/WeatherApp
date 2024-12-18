@@ -26,11 +26,12 @@ class WeatherViewModel : ViewModel() {
     fun fetchWeatherData(city: String, apiKey: String) {
         viewModelScope.launch {
             try {
-                WeatherApiService.fetchWeather(city, apiKey)?.let { weatherData ->
-                    _currentWeather.value = weatherData
-                    fetchWeatherIcon(weatherData.weather.firstOrNull()?.icon.orEmpty())
+                val weatherResponse = WeatherApiService.fetchWeather(city, apiKey)
+                if (weatherResponse != null) {
+                    _currentWeather.value = weatherResponse
+                    fetchWeatherIcon(weatherResponse.weather.firstOrNull()?.icon.orEmpty())
                     _errorMessage.value = null
-                } ?: run {
+                } else {
                     _errorMessage.value = "Failed to fetch weather. Please check your API key or city name."
                 }
             } catch (e: Exception) {
@@ -39,24 +40,13 @@ class WeatherViewModel : ViewModel() {
         }
     }
 
+    // TODO: Implementiere die fetchForecastData-Methode. Diese soll die Vorhersagedaten für die angegebene Stadt und den API-Schlüssel abrufen und die entsprechenden Variablen (_forecast, _errorMessage) setzen.
+
     private fun fetchWeatherIcon(iconId: String) {
         if (iconId.isNotEmpty()) {
             _iconUrl.value = "https://openweathermap.org/img/wn/$iconId@2x.png"
         }
     }
 
-    fun fetchForecastData(city: String, apiKey: String) {
-        viewModelScope.launch {
-            try {
-                WeatherApiService.fetchForecast(city, apiKey)?.let { forecastResponse ->
-                    _forecast.value = forecastResponse.list
-                    _errorMessage.value = null
-                } ?: run {
-                    _errorMessage.value = "Failed to fetch forecast. Please check your API key or city name."
-                }
-            } catch (e: Exception) {
-                _errorMessage.value = "An error occurred: ${e.localizedMessage}"
-            }
-        }
-    }
+
 }
