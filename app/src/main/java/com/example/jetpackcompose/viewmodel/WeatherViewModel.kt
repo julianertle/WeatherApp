@@ -40,9 +40,12 @@ class WeatherViewModel : ViewModel() {
         }
     }
 
-    fun fetchForecastData(city: String, apiKey: String) {
-        //Todo
-    }
+    ////////////////////////////////////
+
+    //Todo
+
+    ////////////////////////////////////
+
 
     private fun fetchWeatherIcon(iconId: String) {
         if (iconId.isNotEmpty()) {

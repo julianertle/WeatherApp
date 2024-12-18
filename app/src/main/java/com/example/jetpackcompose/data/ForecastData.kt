@@ -1,6 +1,6 @@
 package com.example.jetpackcompose.data
 
-data class ForecastResponse(
+data class ForecastData(
     val cod: String,
     val message: Int,
     val cnt: Int,

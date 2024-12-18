@@ -1,6 +1,7 @@
 package com.example.jetpackcompose.api
 
 import android.util.Log
+import com.example.jetpackcompose.data.ForecastData
 import com.example.jetpackcompose.data.WeatherData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -31,8 +32,12 @@ object WeatherApiService {
             @Query("units") units: String = "metric"
         ): retrofit2.Response<WeatherData>
 
-        // TODO: Interface-Methode für die Wettervorhersage (fetchForecast) hinzufügen.
-        // Diese Methode sollte die "forecast"-API der OpenWeather API aufrufen und die Vorhersagedaten zurückgeben.
+        @GET("forecast")
+        suspend fun fetchForecast(
+            @Query("q") city: String,
+            @Query("appid") apiKey: String,
+            @Query("units") units: String = "metric"
+        ): retrofit2.Response<ForecastData>
     }
 
     suspend fun fetchWeather(city: String, apiKey: String): WeatherData? {
