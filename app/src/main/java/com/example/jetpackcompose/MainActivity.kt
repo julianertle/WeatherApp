@@ -16,15 +16,19 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            popupServiceManager.requestPermission()
-        } else {
-            popupServiceManager.startPopupService()
-        }
+        //handlePopupService()      // Todo Uncomment this line
 
         setContent {
             val viewModel: WeatherViewModel = viewModel()
             WeatherApp(viewModel)
+        }
+    }
+
+    private fun handlePopupService() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            popupServiceManager.requestPermission()
+        } else {
+            popupServiceManager.startPopupService()
         }
     }
 }

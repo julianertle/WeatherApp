@@ -104,13 +104,24 @@ fun ForecastWeatherView(forecast: List<ForecastItem>) {
                     .align(Alignment.CenterHorizontally)
             )
 
-
             ////////////////////////////////////
 
             //TODO Zeige die Wettervorhersage in einer Liste an (optional aber empfohlen: nutze die WeatherCard Komponente)
+            // Der Text unten darf entfernt werden.
 
             ////////////////////////////////////
 
         }
+
+        Text(
+            text = "TODO: Implement me :)",
+            style = MaterialTheme.typography.headlineLarge.copy(
+                fontSize = 18.sp,
+                color = Color.Black
+            ),
+            modifier = Modifier
+                .padding(bottom = 32.dp)
+                .align(Alignment.CenterHorizontally)
+        )
     }
 }
