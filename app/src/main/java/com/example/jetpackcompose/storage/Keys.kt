@@ -1,4 +1,4 @@
-package com.example.jetpackcompose.data
+package com.example.jetpackcompose.storage
 
 import androidx.datastore.preferences.core.stringPreferencesKey
 

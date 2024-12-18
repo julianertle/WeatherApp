@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.example.jetpackcompose.data.WeatherData
-import com.example.jetpackcompose.data.Keys
+import com.example.jetpackcompose.storage.Keys
 import androidx.compose.ui.platform.LocalContext
 import com.example.jetpackcompose.viewmodel.WeatherViewModel
 import java.text.SimpleDateFormat
@@ -22,6 +22,7 @@ import java.util.Date
 import java.util.Locale
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.jetpackcompose.ui.components.SearchBarSample
+import com.example.jetpackcompose.ui.views.dataStore
 
 @Composable
 fun CurrentWeatherView(currentWeather: WeatherData?, iconUrl: String?) {

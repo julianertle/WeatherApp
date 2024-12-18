@@ -1,4 +1,4 @@
-package com.example.jetpackcompose.ui
+package com.example.jetpackcompose.ui.views
 
 import android.content.Context
 import android.content.Intent
@@ -20,7 +20,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.delay
-import com.example.jetpackcompose.data.Keys
+import com.example.jetpackcompose.storage.Keys
 import com.example.jetpackcompose.service.PopupService
 
 val Context.dataStore by preferencesDataStore(name = "settings")

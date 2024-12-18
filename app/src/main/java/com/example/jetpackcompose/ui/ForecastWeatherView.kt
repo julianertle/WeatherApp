@@ -7,7 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.example.jetpackcompose.data.ForecastItem
 import com.example.jetpackcompose.ui.components.WeatherCard
-import com.example.jetpackcompose.data.Keys
+import com.example.jetpackcompose.storage.Keys
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.jetpackcompose.viewmodel.WeatherViewModel
 import com.example.jetpackcompose.ui.components.SearchBarSample
+import com.example.jetpackcompose.ui.views.dataStore
 
 @Composable
 fun ForecastWeatherView(forecast: List<ForecastItem>) {
