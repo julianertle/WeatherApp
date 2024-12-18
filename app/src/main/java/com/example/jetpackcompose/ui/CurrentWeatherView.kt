@@ -16,9 +16,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.jetpackcompose.data.WeatherData
 import com.example.jetpackcompose.data.Keys
 import androidx.compose.ui.platform.LocalContext
-import com.example.jetpackcompose.model.WeatherViewModel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
+import com.example.jetpackcompose.viewmodel.WeatherViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

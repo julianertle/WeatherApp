@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.jetpackcompose.model.WeatherViewModel
+import com.example.jetpackcompose.viewmodel.WeatherViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

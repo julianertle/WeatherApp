@@ -7,7 +7,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
-import com.example.jetpackcompose.model.WeatherViewModel
+import com.example.jetpackcompose.viewmodel.WeatherViewModel
 import com.example.jetpackcompose.ui.components.BottomNavBar
 
 @Composable

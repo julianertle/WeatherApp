@@ -1,4 +1,4 @@
-package com.example.jetpackcompose.model
+package com.example.jetpackcompose.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

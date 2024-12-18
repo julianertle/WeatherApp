@@ -1,4 +1,4 @@
-package com.example.jetpackcompose.model
+package com.example.jetpackcompose.viewmodel
 
 import com.example.jetpackcompose.data.WeatherRepository
 import androidx.lifecycle.ViewModel

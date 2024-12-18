@@ -9,8 +9,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.compose.setContent
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.jetpackcompose.data.WeatherRepositoryImpl
-import com.example.jetpackcompose.model.WeatherViewModel
-import com.example.jetpackcompose.model.WeatherViewModelFactory
+import com.example.jetpackcompose.viewmodel.WeatherViewModel
+import com.example.jetpackcompose.viewmodel.WeatherViewModelFactory
 import com.example.jetpackcompose.service.PopupService
 import com.example.jetpackcompose.ui.WeatherApp
 
