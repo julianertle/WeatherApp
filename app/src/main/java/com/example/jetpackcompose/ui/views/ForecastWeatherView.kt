@@ -1,12 +1,10 @@
 package com.example.jetpackcompose.ui.views
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.example.jetpackcompose.data.ForecastItem
-import com.example.jetpackcompose.ui.components.WeatherCard
 import com.example.jetpackcompose.storage.Keys
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -61,7 +59,6 @@ fun ForecastWeatherView(forecast: List<ForecastItem>) {
         )
     }
 
-    // Display error message if any
     errorMessage?.let {
         Text(
             text = it,
